@@ -1,13 +1,44 @@
-/* Expose the variables/functions sent through the preload.ts */
+/* 
+
+    Expose the variables/functions sent through the preload.ts 
+
+*/
+
+type _MainAPI = {
+    featherReplace(): void,
+    hljs: HLJSApi
+}
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 type BridgedWindow = Window & typeof globalThis & {
     mainAPI: any
 }
-const mainAPI: any = (window as BridgedWindow).mainAPI;
 /* eslint-enable  @typescript-eslint/no-explicit-any */
+const mainAPI: _MainAPI = (window as BridgedWindow).mainAPI;
 
-console.log("Renderer loaded!");
-console.debug(mainAPI.desktop);
+/*
 
-mainAPI.feather.replace();
+    Initialization
+
+*/
+
+function init() {
+
+    window.addEventListener("auxclick", (event) => {
+        if (event.button === 1) {
+            event.preventDefault();
+        }
+    });
+    window.addEventListener("click", (event) => {
+        if (event.ctrlKey) {
+            event.preventDefault();
+        }
+    });
+
+    //TODO: Set up ContextMenu
+
+    mainAPI.featherReplace();
+
+}
+
+init();
