@@ -4,19 +4,23 @@
     "description": "Codex - Note-taking app for programmers and CS students",
     "homepage": "https://www.codexnotes.com/",
     "repository": "https://github.com/jcv8000/Codex",
-    "main": "main.js",
+    "main": "dist/main.js",
     "scripts": {
-        "start": "electron .",
-        "dist": "electron-builder"
+        "start": "tsc && npx electron .",
+        "dist": "tsc && npx electron-builder"
     },
     "build": {
         "appId": "io.github.jcv8000.codex",
         "productName": "Codex",
         "copyright": "CC-BY-NC-4.0",
         "buildVersion": "1.4.1",
+        "directories": {
+            "buildResources": "assets/img",
+            "output": "Release"
+        },
         "mac": {
             "target": "dmg",
-            "icon": "./icons/icon.icns",
+            "icon": "./assets/icons/icon.icns",
             "category": "public.app-category.productivity"
         },
         "win": {
@@ -24,7 +28,7 @@
                 "nsis",
                 "zip"
             ],
-            "icon": "./icons/icon.ico",
+            "icon": "./assets/icons/icon.ico",
             "signingHashAlgorithms": [
                 "sha256",
                 "sha1"
@@ -42,7 +46,7 @@
                 "deb",
                 "tar.xz"
             ],
-            "icon": "./icons/icon.icns",
+            "icon": "./assets/icons/icon.icns",
             "vendor": "Joshua Vickery",
             "category": "Utility",
             "executableName": "Codex",
@@ -56,8 +60,26 @@
     },
     "license": "CC-BY-NC-4.0",
     "devDependencies": {
+        "@types/feather-icons": "^4.7.0",
+        "@types/node": "^16.9.4",
+        "@types/prosemirror-commands": "^1.0.4",
+        "@types/prosemirror-history": "^1.0.3",
+        "@types/prosemirror-inputrules": "^1.0.4",
+        "@types/prosemirror-keymap": "^1.0.4",
+        "@types/prosemirror-markdown": "^1.5.2",
+        "@types/prosemirror-menu": "^1.0.6",
+        "@types/prosemirror-model": "^1.13.2",
+        "@types/prosemirror-state": "^1.2.7",
+        "@types/prosemirror-transform": "^1.1.4",
+        "@types/prosemirror-view": "^1.19.1",
+        "@types/validator": "^13.6.3",
+        "@typescript-eslint/eslint-plugin": "^4.31.1",
+        "@typescript-eslint/parser": "^4.31.1",
         "electron": "^12.1.0",
-        "electron-builder": "latest"
+        "electron-builder": "latest",
+        "eslint": "^7.32.0",
+        "eslint-plugin-import": "^2.24.2",
+        "typescript": "^4.4.3"
     },
     "dependencies": {
         "@benrbray/prosemirror-math": "^0.2.2",
