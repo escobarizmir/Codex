@@ -4,9 +4,12 @@
 
 */
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 type _MainAPI = {
     featherReplace(): void,
-    hljs: HLJSApi
+    hljs: HLJSApi,
+    ipcHandle(channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void): void,
+    initializeTitlebar(): void
 }
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
@@ -15,6 +18,8 @@ type BridgedWindow = Window & typeof globalThis & {
 }
 /* eslint-enable  @typescript-eslint/no-explicit-any */
 const mainAPI: _MainAPI = (window as BridgedWindow).mainAPI;
+
+
 
 /*
 
@@ -42,3 +47,7 @@ function init() {
 }
 
 init();
+
+mainAPI.ipcHandle("updateAvailable", () => {
+    console.log("bruh");
+});
