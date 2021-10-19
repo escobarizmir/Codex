@@ -1,6 +1,8 @@
 // Modules to control application life and create native browser window
 import { app, BrowserWindow, dialog, net, MessageBoxOptions } from "electron";
 import * as path from "path";
+import validator from "validator";
+import * as semver from "semver";
 
 // This makes sure we get a non-cached verison of the "latestversion.txt" file for the update check
 app.commandLine.appendSwitch("disable-http-cache");
@@ -107,11 +109,21 @@ function checkForUpdates() {
         const request = net.request("https://jcv8000.github.io/codex/latestversion.txt");
         request.on("response", (response) => {
             response.on("data", (chunk) => {
-                if (chunk.toString() !== currentVersion) {
 
-                    mainWindow.webContents.send("updateAvailable");
+                const onlineVersion = validator.escape(chunk.toString());
+
+                if (semver.valid(onlineVersion)) {
+
+                    // Check if online version # is greater than current version
+                    if (semver.compare(currentVersion, onlineVersion) == -1) {
+                        mainWindow.webContents.send("updateAvailable", onlineVersion);
+                    }
 
                 }
+                else {
+                    errorPoup("Failed to check for updates", "Response body was not a valid version number.");
+                }
+
             });
             response.on("aborted", () => {
                 errorPoup("Net request aborted while trying to check for updates", "");

@@ -8,6 +8,7 @@
         "baseUrl": ".",
         "outDir": "dist",
         "resolveJsonModule": true,
+        "removeComments": true,
         "paths": {
             "*": [
                 "node_modules/*"

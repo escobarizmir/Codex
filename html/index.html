@@ -36,14 +36,14 @@
                     <ul class="nav flex-column unselectable">
                         <li class="nav-item my-sidebar-item">
                             <a id="homeTab" class="nav-link my-sidebar-link active" href="#" draggable="false"
-                                onclick="showHomePage()">
+                                onclick="showUIPage('homePage')">
                                 <span data-feather="home"></span>
                                 Home
                             </a>
                         </li>
                         <li class="nav-item my-sidebar-item">
                             <a id="settingsTab" class="nav-link my-sidebar-link" href="#" draggable="false"
-                                onclick="showSettingsPage()">
+                                onclick="showUIPage('settingsPage')">
                                 <span data-feather="settings"></span>
                                 Settings
                             </a>
@@ -71,7 +71,7 @@
                             <ul class="nav collapse" id="help-list">
                                 <li class="nav-item my-sidebar-item">
                                     <a href="#" id="firstHelpPage" class="nav-link my-sidebar-link indent unselectable"
-                                        onclick="showHelpPage(); loadHelpPage('gettingstarted')">
+                                        onclick="showUIPage('helpPage'); loadHelpPage('gettingstarted')">
                                         <div class="row">
                                             <div class="col-auto pr-0"><span data-feather="zap"></span></div>
                                             <div class="col pr-4" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
@@ -82,7 +82,7 @@
                                 </li>
                                 <li class="nav-item my-sidebar-item">
                                     <a href="#" class="nav-link my-sidebar-link indent unselectable"
-                                        onclick="showHelpPage(); loadHelpPage('basicediting')">
+                                        onclick="showUIPage('helpPage'); loadHelpPage('basicediting')">
                                         <div class="row">
                                             <div class="col-auto pr-0"><span data-feather="edit"></span></div>
                                             <div class="col pr-4" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
@@ -93,7 +93,7 @@
                                 </li>
                                 <li class="nav-item my-sidebar-item">
                                     <a href="#" class="nav-link my-sidebar-link indent unselectable"
-                                        onclick="showHelpPage(); loadHelpPage('equations')">
+                                        onclick="showUIPage('helpPage'); loadHelpPage('equations')">
                                         <div class="row">
                                             <div class="col-auto pr-0"><span data-feather="divide"></span></div>
                                             <div class="col pr-4" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
@@ -104,7 +104,7 @@
                                 </li>
                                 <li class="nav-item my-sidebar-item">
                                     <a href="#" class="nav-link my-sidebar-link indent unselectable"
-                                        onclick="showHelpPage(); loadHelpPage('keybinds')">
+                                        onclick="showUIPage('helpPage'); loadHelpPage('keybinds')">
                                         <div class="row">
                                             <div class="col-auto pr-0"><span data-feather="command"></span></div>
                                             <div class="col pr-4" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
@@ -115,7 +115,7 @@
                                 </li>
                                 <li class="nav-item my-sidebar-item">
                                     <a href="#" id="cloudSyncPage" class="nav-link my-sidebar-link indent unselectable"
-                                        onclick="showHelpPage(); loadHelpPage('exporting')">
+                                        onclick="showUIPage('helpPage'); loadHelpPage('exporting')">
                                         <div class="row">
                                             <div class="col-auto pr-0"><span data-feather="external-link"></span></div>
                                             <div class="col pr-4" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
@@ -126,7 +126,7 @@
                                 </li>
                                 <li class="nav-item my-sidebar-item">
                                     <a href="#" id="cloudSyncPage" class="nav-link my-sidebar-link indent unselectable"
-                                        onclick="showHelpPage(); loadHelpPage('cloudsyncing')">
+                                        onclick="showUIPage('helpPage'); loadHelpPage('cloudsyncing')">
                                         <div class="row">
                                             <div class="col-auto pr-0"><span data-feather="upload-cloud"></span></div>
                                             <div class="col pr-4" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
@@ -153,7 +153,7 @@
                             <a id="updateBlock" class="nav-link" href="#" draggable="false"
                                 onclick="shell.openExternal('https://www.codexnotes.com/download')">
                                 <span data-feather="download" style="color: #269700;"></span>
-                                New update available
+                                <span id="updateBlockText">New update available</span>
                             </a>
                         </li>
 
