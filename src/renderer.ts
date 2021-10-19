@@ -60,8 +60,6 @@ function init() {
         }
     });
 
-    //TODO: Set up ContextMenu
-
     mainAPI.featherReplace();
 
 }

@@ -1,16 +1,21 @@
-// Modules to control application life and create native browser window
 import { app, BrowserWindow, dialog, net, MessageBoxOptions } from "electron";
 import * as path from "path";
 import validator from "validator";
 import * as semver from "semver";
 
+// TODO: This package as of 3.1.1 has a broken type file that won't let me compile with TS.
+//       When it gets fixed turn this back into a normal TS import.
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const contextMenu = require("electron-context-menu");
+
 // This makes sure we get a non-cached verison of the "latestversion.txt" file for the update check
 app.commandLine.appendSwitch("disable-http-cache");
 
-const currentVersion = "2.0.0";
 
+const currentVersion = "2.0.0";
 let mainWindow: BrowserWindow = null;
 const gotTheLock = app.requestSingleInstanceLock();
+
 
 //FORCE SINGLE INSTANCE
 if (!gotTheLock) {
@@ -18,19 +23,14 @@ if (!gotTheLock) {
 }
 else {
     app.on("second-instance", () => {
-        // Someone tried to run a second instance, we should focus our window.
         if (mainWindow) {
             if (mainWindow.isMinimized()) mainWindow.restore();
             mainWindow.focus();
         }
     });
 
-    // This method will be called when Electron has finished
-    // initialization and is ready to create browser windows.
-    // Some APIs can only be used after this event occurs.
     app.on("ready", createWindow);
 
-    // Quit when all windows are closed.
     app.on("window-all-closed", function () {
         // On OS X it is common for applications and their menu bar
         // to stay active until the user quits explicitly with Cmd + Q
@@ -89,6 +89,11 @@ function createWindow() {
     });
 
     mainWindow.loadFile("html/index.html");
+
+    contextMenu({
+        showSearchWithGoogle: false,
+        showLookUpSelection: false
+    });
 
     mainWindow.webContents.once("dom-ready", () => {
 
