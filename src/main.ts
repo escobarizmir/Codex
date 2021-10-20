@@ -1,7 +1,10 @@
-import { app, BrowserWindow, dialog, net, MessageBoxOptions } from "electron";
+import { app, BrowserWindow, dialog, net, MessageBoxOptions, ipcMain } from "electron";
 import * as path from "path";
 import validator from "validator";
 import * as semver from "semver";
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const remote = require("@electron/remote/main");
 
 // TODO: This package as of 3.1.1 has a broken type file that won't let me compile with TS.
 //       When it gets fixed turn this back into a normal TS import.
@@ -10,7 +13,6 @@ const contextMenu = require("electron-context-menu");
 
 // This makes sure we get a non-cached verison of the "latestversion.txt" file for the update check
 app.commandLine.appendSwitch("disable-http-cache");
-
 
 const currentVersion = "2.0.0";
 let mainWindow: BrowserWindow = null;
@@ -79,14 +81,17 @@ function createWindow() {
         minWidth: 920,
         minHeight: 500,
         webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            preload: __dirname + "/preload.js"
+            preload: __dirname + "/preload.js",
         },
         icon: path.join(__dirname, iconPath),
         show: false,
         title: "Codex"
     });
+
+    // Enable @electron/remote in preload so we can
+    // send over app.getPath("userData")
+    remote.enable(mainWindow.webContents);
+    remote.initialize();
 
     mainWindow.loadFile("html/index.html");
 
@@ -108,6 +113,10 @@ function createWindow() {
     //Menu.setApplicationMenu(new Menu());
 
 }
+
+ipcMain.on("errorPopup", (event, message: string, detail: string) => {
+    errorPoup(message, detail);
+});
 
 function checkForUpdates() {
     try {

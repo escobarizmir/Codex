@@ -14,7 +14,7 @@
     --accent-color: #FF7A27;
     --editor-scale: 1.0;
     --footer-height: 24px;
-    --code-white-space: 'pre';
+    --code-white-space: pre;
 }
 
 body {
