@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, net, MessageBoxOptions, ipcMain, nativeTheme } from "electron";
+import { app, BrowserWindow, dialog, net, MessageBoxOptions, ipcMain, nativeTheme, Menu, MenuItem, shell } from "electron";
 import * as path from "path";
 import validator from "validator";
 import * as semver from "semver";
@@ -65,7 +65,7 @@ function createWindow() {
     let iconPath = "";
 
     if (process.platform === "win32") {
-        useFrame = true;
+        useFrame = false;
         iconPath = "../assets/icons/icon.ico";
     }
     else if (process.platform === "linux") {
@@ -101,45 +101,18 @@ function createWindow() {
         showLookUpSelection: false
     });
 
+    Menu.setApplicationMenu(normalMenu);
+
     mainWindow.webContents.once("dom-ready", () => {
 
         mainWindow.show();
         checkForUpdates();
 
     });
-
     // Open the DevTools.
     //mainWindow.webContents.openDevTools();
 
-    //Menu.setApplicationMenu(new Menu());
-
 }
-
-ipcMain.on("errorPopup", (event, args: string[]) => {
-    errorPoup(args[0], args[1]);
-});
-
-ipcMain.on("setNativeThemeSource", (event, value: string) => {
-    if (value == "system")
-        nativeTheme.themeSource = "system";
-    else if (value == "light")
-        nativeTheme.themeSource = "light";
-    else if (value == "dark")
-        nativeTheme.themeSource = "dark";
-});
-
-ipcMain.on("maximize", (event) => {
-    mainWindow.maximize();
-});
-
-ipcMain.on("setMenuBarVisibility", (event, value: boolean) => {
-    mainWindow.setMenuBarVisibility(value);
-});
-
-ipcMain.on("restart", (event) => {
-    app.relaunch();
-    app.exit();
-});
 
 function checkForUpdates() {
     try {
@@ -202,3 +175,258 @@ function errorPoup(mes: string, det: string) {
 
     mainWindow.webContents.send("console.error", `${mes}\n${det}`);
 }
+
+function executeJavascriptInRenderer(js: string): void {
+    mainWindow.webContents.executeJavaScript(js + ";0").catch((reason) => {
+        errorPoup("Error executing javascript in renderer process", reason.toString());
+    });
+}
+
+
+const normalMenu = new Menu();
+normalMenu.append(new MenuItem({
+    label: "File",
+    submenu: [
+        {
+            label: "New Notebook",
+            accelerator: "CmdOrCtrl+N",
+            click: () => executeJavascriptInRenderer("$('#newNotebookModal').modal('show')")
+        },
+        {
+            type: "separator"
+        },
+        {
+            label: "Exit",
+            click: () => app.exit()
+        }
+    ]
+}));
+
+normalMenu.append(new MenuItem({
+    label: "View",
+    submenu: [
+        {
+            label: "Toggle Sidebar",
+            accelerator: "CmdOrCtrl+D",
+            click: () => executeJavascriptInRenderer("toggleSidebar(null)")
+        },
+        {
+            label: "Reset Sidebar Width",
+            click: () => executeJavascriptInRenderer("resizeSidebar(275)")
+        },
+        {
+            type: "separator"
+        },
+        {
+            label: "Toggle Developer Tools",
+            accelerator: "CmdOrCtrl+Shift+I",
+            click: () => mainWindow.webContents.toggleDevTools()
+        }
+    ]
+}));
+
+normalMenu.append(new MenuItem({
+    label: "Help",
+    submenu: [
+        {
+            label: "Help",
+            accelerator: "F1",
+            click: () => executeJavascriptInRenderer("autoOpenHelpTab()")
+        },
+        {
+            label: "Website",
+            click: () => shell.openExternal("https://www.codexnotes.com/")
+        },
+        {
+            label: "Update notes",
+            click: () => shell.openExternal("https://www.codexnotes.com/updates/")
+        },
+        {
+            label: "Give Feedback (Google Forms)",
+            click: () => shell.openExternal("https://forms.gle/uDLJpqLbNLcEx1F8A")
+        },
+        {
+            type: "separator"
+        },
+        {
+            label: "About",
+            click: () => executeJavascriptInRenderer("openAboutPage()")
+        }
+    ]
+}));
+
+
+const editingMenu = new Menu();
+editingMenu.append(new MenuItem({
+    label: "File",
+    submenu: [
+        {
+            label: "New Notebook",
+            accelerator: "CmdOrCtrl+N",
+            click: () => executeJavascriptInRenderer("$('#newNotebookModal').modal('show')")
+        },
+        {
+            label: "Save Page",
+            accelerator: "CmdOrCtrl+S",
+            click: () => executeJavascriptInRenderer("saveSelectedPage(true)")
+        },
+        {
+            type: "separator"
+        },
+        {
+            label: "Export page to PDF...",
+            accelerator: "CmdOrCtrl+P",
+            click: () => executeJavascriptInRenderer("printCurrentPage()")
+        },
+        {
+            label: "Export page to Markdown...",
+            click: () => executeJavascriptInRenderer("exportCurrentPageToMarkdown()")
+        },
+        {
+            type: "separator"
+        },
+        {
+            label: "Exit",
+            click: () => app.exit()
+        }
+    ]
+}));
+
+editingMenu.append(new MenuItem({
+    label: "Edit",
+    submenu: [
+        {
+            label: "Cut",
+            accelerator: "CmdOrCtrl+X",
+            ////click: () => document.execCommand("cut")
+        },
+        {
+            label: "Copy",
+            accelerator: "CmdOrCtrl+C",
+            ////click: () => document.execCommand("copy")
+        },
+        {
+            label: "Paste",
+            accelerator: "CmdOrCtrl+V",
+            ////click: () => document.execCommand("paste")
+        }
+    ]
+}));
+
+editingMenu.append(new MenuItem({
+    label: "View",
+    submenu: [
+        {
+            label: "Zoom In",
+            accelerator: "CmdOrCtrl+=",
+            click: () => executeJavascriptInRenderer("zoomIn()")
+        },
+        {
+            label: "Zoom Out",
+            accelerator: "CmdOrCtrl+-",
+            click: () => executeJavascriptInRenderer("zoomOut()")
+        },
+        {
+            label: "Restore Default Zoom",
+            accelerator: "CmdOrCtrl+R",
+            click: () => executeJavascriptInRenderer("defaultZoom()")
+        },
+        {
+            type: "separator"
+        },
+        {
+            label: "Toggle Sidebar",
+            accelerator: "CmdOrCtrl+D",
+            click: () => executeJavascriptInRenderer("toggleSidebar(null)")
+        },
+        {
+            label: "Reset Sidebar Width",
+            click: () => executeJavascriptInRenderer("resizeSidebar(275)")
+        },
+        {
+            label: "Toggle Editor Toolbar",
+            accelerator: "CmdOrCtrl+T",
+            click: () => executeJavascriptInRenderer("toggleEditorRibbon()")
+        },
+        {
+            type: "separator"
+        },
+        {
+            label: "Toggle Developer Tools",
+            accelerator: "CmdOrCtrl+Shift+I",
+            click: () => mainWindow.webContents.toggleDevTools()
+        }
+    ]
+}));
+
+editingMenu.append(new MenuItem({
+    label: "Help",
+    submenu: [
+        {
+            label: "Help",
+            accelerator: "F1",
+            click: () => executeJavascriptInRenderer("autoOpenHelpTab()")
+        },
+        {
+            label: "Website",
+            click: () => shell.openExternal("https://www.codexnotes.com/")
+        },
+        {
+            label: "Update notes",
+            click: () => shell.openExternal("https://www.codexnotes.com/updates/")
+        },
+        {
+            label: "Give Feedback (Google Forms)",
+            click: () => shell.openExternal("https://forms.gle/uDLJpqLbNLcEx1F8A")
+        },
+        {
+            type: "separator"
+        },
+        {
+            label: "About",
+            click: () => executeJavascriptInRenderer("openAboutPage()")
+        }
+    ]
+}));
+
+/*
+    IPC Events
+*/
+
+ipcMain.on("errorPopup", (event, args: string[]) => {
+    errorPoup(args[0], args[1]);
+});
+
+ipcMain.on("setNativeThemeSource", (event, value: string) => {
+    if (value == "system")
+        nativeTheme.themeSource = "system";
+    else if (value == "light")
+        nativeTheme.themeSource = "light";
+    else if (value == "dark")
+        nativeTheme.themeSource = "dark";
+});
+
+ipcMain.on("maximize", (event) => {
+    mainWindow.maximize();
+});
+
+ipcMain.on("setMenuBarVisibility", (event, value: boolean) => {
+    mainWindow.setMenuBarVisibility(value);
+});
+
+ipcMain.on("restart", (event) => {
+    app.relaunch();
+    app.exit();
+});
+
+ipcMain.on("exit", (event) => {
+    app.exit();
+});
+
+ipcMain.on("normalMenu", (event) => {
+    Menu.setApplicationMenu(normalMenu);
+});
+
+ipcMain.on("editingMenu", (event) => {
+    Menu.setApplicationMenu(editingMenu);
+});

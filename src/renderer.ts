@@ -12,7 +12,7 @@ type _MainAPI = {
     fsExistsSync(path: string): boolean,
     fsReadFileSync(path: string): string,
     fsWriteFileSync(path: string, data: string): void,
-    nativeThemeShouldUseDarkColors(): boolean
+    nativeThemeShouldUseDarkColors: boolean
 }
 
 type BridgedWindow = Window & typeof globalThis & {
@@ -79,6 +79,9 @@ class Page {
     Global variables
 */
 
+
+// TODO remove this decorator later
+/* eslint-disable prefer-const */
 let darkStyleLink: HTMLLinkElement;
 
 let save: Save;
@@ -104,9 +107,6 @@ let fadeInSaveIndicator: NodeJS.Timeout;
 let canSaveData = false;
 let canSavePrefs = false;
 let zoomLevel = 1.000;
-let titlebar; //TODO
-let normalMenu; //TODO
-let editingMenu; //TODO
 
 let sidebarWidth = 275;
 
@@ -116,7 +116,7 @@ let destroyOpenedNotebooks = false;
 
 const lightThemes = [ "a11y-light", "arduino-light", "ascetic", "atelier-cave-light", "atelier-dune-light", "atelier-estuary-light", "atelier-forest-light", "atelier-heath-light", "atelier-lakeside-light", "atelier-plateau-light", "atelier-savanna-light", "atelier-seaside-light", "atelier-sulphurpool-light", "atom-one-light", "color-brewer", "default", "docco", "foundation", "github-gist", "github", "font-weight: bold;", "googlecode", "grayscale", "gruvbox-light", "idea", "isbl-editor-light", "kimbie.light", "lightfair", "magula", "mono-blue", "nnfx", "paraiso-light", "purebasic", "qtcreator_light", "routeros", "solarized-light", "tomorrow", "vs", "xcode" ];
 const darkThemes = [ "a11y-dark", "agate", "androidstudio", "an-old-hope", "arta", "atelier-cave-dark", "atelier-dune-dark", "atelier-estuary-dark", "atelier-forest-dark", "atelier-heath-dark", "atelier-lakeside-dark", "atelier-plateau-dark", "atelier-savanna-dark", "atelier-seaside-dark", "atelier-sulphurpool-dark", "atom-one-dark-reasonable", "atom-one-dark", "font-weight: bold;", "codepen-embed", "darcula", "dark", "dracula", "far", "gml", "gradient-dark", "gruvbox-dark", "hopscotch", "hybrid", "ir-black", "isbl-editor-dark", "kimbie.dark", "lioshi", "monokai-sublime", "monokai", "night-owl", "nnfx-dark", "nord", "ocean", "obsidian", "paraiso-dark", "pojoaque", "qtcreator_dark", "railscasts", "rainbow", "shades-of-purple", "solarized-dark", "srcery", "sunburst", "tomorrow-night-blue", "tomorrow-night-bright", "tomorrow-night-eighties", "tomorrow-night", "vs2015", "xt256", "zenburn" ];
-
+/* eslint-enable prefer-const */
 
 /*
     Initialization
@@ -160,9 +160,6 @@ function init() {
         }
     });
 
-
-    // TODO: Set up titlebars
-
     // Set up example code block in Settings page and highlight it
     document.getElementById("exampleCode").innerHTML = "//EXAMPLE CODE BLOCK\n#include &lt;iostream&gt;\n\nint main(int argc, char *argv[]) {\n\tfor (auto i = 0; i &lt; 0xFFFF; i++)\n\t\tcout &lt;&lt; \"Hello, World!\" &lt;&lt; endl;\n\treturn -2e3 + 12l;\n}";
     document.getElementById("exampleCode").innerHTML = api.hljsHighlightCpp(document.getElementById("exampleCode").innerText);
@@ -198,7 +195,6 @@ function init() {
 }
 
 init();
-
 
 /*
     Functions
@@ -295,7 +291,7 @@ function applyPrefsAtStart(): void {
     }
     else if (prefs.theme == 2) {
         api.ipcSend("setNativeThemeSource", "system");
-        if (api.nativeThemeShouldUseDarkColors()) {
+        if (api.nativeThemeShouldUseDarkColors) {
             darkStyleLink = document.createElement("link");
             darkStyleLink.rel = "stylesheet";
             darkStyleLink.type = "text/css";
@@ -398,7 +394,7 @@ function applyPrefsRuntime(needsRestart = false): void {
     }
 
     prefs.theme = parseInt((document.getElementById("themeSelect") as HTMLSelectElement).value);
-    let header = document.getElementsByTagName("head")[0];
+    const header = document.getElementsByTagName("head")[0];
     if (prefs.theme == 1) {
         if (darkStyleLink == null) {
             darkStyleLink = document.createElement("link");
@@ -419,7 +415,7 @@ function applyPrefsRuntime(needsRestart = false): void {
     }
     else if (prefs.theme == 2) {
         api.ipcSend("setNativeThemeSource", "system");
-        if (api.nativeThemeShouldUseDarkColors()) {
+        if (api.nativeThemeShouldUseDarkColors) {
             darkStyleLink = document.createElement("link");
             darkStyleLink.rel = "stylesheet";
             darkStyleLink.type = "text/css";
@@ -504,7 +500,7 @@ function errorPopup(message: string, detail: string) {
     api.ipcSend("errorPopup", message, detail);
 }
 
-function showUIPage(id: string): void {
+function showUIPage(id: "homePage" | "settingsPage" | "helpPage" | "editorPage"): void {
     const ids = ["homePage", "settingsPage", "helpPage", "editorPage"];
 
     if (ids.indexOf(id) != -1) {

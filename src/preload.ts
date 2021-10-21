@@ -1,7 +1,6 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent, nativeTheme } from "electron";
 import * as feather from "feather-icons";
 import * as fs from "fs";
-import { compare } from "semver";
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 
@@ -13,6 +12,8 @@ hljs.registerLanguage("cpp", require("highlight.js/lib/languages/cpp"));
 // window.isMaximized() to renderer
 // without using @electron/remote
 const { app, getCurrentWindow } = require("@electron/remote");
+
+const customTitlebar = require("@treverix/custom-electron-titlebar");
 
 /* eslint-enable @typescript-eslint/no-var-requires */
 
@@ -50,8 +51,17 @@ contextBridge.exposeInMainWorld("mainAPI", {
         fs.writeFileSync(path, data, "utf-8");
     },
 
-    nativeThemeShouldUseDarkColors: (): boolean => {
+    nativeThemeShouldUseDarkColors: (): boolean => { 
         return nativeTheme.shouldUseDarkColors;
     }
 
+});
+
+// Initialize custom titlebar
+window.addEventListener("DOMContentLoaded", () => {
+    new customTitlebar.Titlebar({
+        backgroundColor: customTitlebar.Color.fromHex("#343A40"),
+            unfocusEffect: true,
+            icon: "../assets/icons/icon.ico"
+    });
 });
