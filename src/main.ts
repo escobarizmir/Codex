@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, net, MessageBoxOptions, ipcMain } from "electron";
+import { app, BrowserWindow, dialog, net, MessageBoxOptions, ipcMain, nativeTheme } from "electron";
 import * as path from "path";
 import validator from "validator";
 import * as semver from "semver";
@@ -13,6 +13,7 @@ const contextMenu = require("electron-context-menu");
 
 // This makes sure we get a non-cached verison of the "latestversion.txt" file for the update check
 app.commandLine.appendSwitch("disable-http-cache");
+app.disableHardwareAcceleration();
 
 const currentVersion = "2.0.0";
 let mainWindow: BrowserWindow = null;
@@ -114,8 +115,30 @@ function createWindow() {
 
 }
 
-ipcMain.on("errorPopup", (event, message: string, detail: string) => {
-    errorPoup(message, detail);
+ipcMain.on("errorPopup", (event, args: string[]) => {
+    errorPoup(args[0], args[1]);
+});
+
+ipcMain.on("setNativeThemeSource", (event, value: string) => {
+    if (value == "system")
+        nativeTheme.themeSource = "system";
+    else if (value == "light")
+        nativeTheme.themeSource = "light";
+    else if (value == "dark")
+        nativeTheme.themeSource = "dark";
+});
+
+ipcMain.on("maximize", (event) => {
+    mainWindow.maximize();
+});
+
+ipcMain.on("setMenuBarVisibility", (event, value: boolean) => {
+    mainWindow.setMenuBarVisibility(value);
+});
+
+ipcMain.on("restart", (event) => {
+    app.relaunch();
+    app.exit();
 });
 
 function checkForUpdates() {
@@ -127,6 +150,8 @@ function checkForUpdates() {
                 const onlineVersion = validator.escape(chunk.toString());
 
                 if (semver.valid(onlineVersion)) {
+
+                    mainWindow.webContents.send("console.log", `UPDATE CHECK\nCurrent version: ${currentVersion}\nLatest version: ${onlineVersion}`);
 
                     // Check if online version # is greater than current version
                     if (semver.compare(currentVersion, onlineVersion) == -1) {
@@ -174,4 +199,6 @@ function errorPoup(mes: string, det: string) {
         message: mes
     };
     dialog.showMessageBox(mainWindow, options);
+
+    mainWindow.webContents.send("console.error", `${mes}\n${det}`);
 }

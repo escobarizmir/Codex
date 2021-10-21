@@ -61,6 +61,7 @@
     },
     "license": "CC-BY-NC-4.0",
     "devDependencies": {
+        "@types/bootstrap": "^5.1.6",
         "@types/feather-icons": "^4.7.0",
         "@types/jquery": "^3.5.8",
         "@types/node": "^16.9.4",
