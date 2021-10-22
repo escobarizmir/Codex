@@ -84,6 +84,7 @@ let selectedPage: Page;
 let selectedPageContent: string;
 
 let rightClickedNotebookIndex: number;
+
 // PAGE INDEX IS LOCAL TO THE NOTEBOOK
 let rightClickedPageIndex: number;
 
@@ -712,6 +713,31 @@ function showUIPage(id: "homePage" | "settingsPage" | "helpPage" | "editorPage")
         document.getElementById(id).style.display = "block";
 
         document.getElementById("mainContainer").scrollTo(0, 0);
+    }
+}
+
+function zoomIn(): void {
+    if (selectedPage != null) {
+        if (zoomLevel < 4.000) {
+            zoomLevel += 0.100;
+            updateZoom();
+        }
+    }
+}
+
+function zoomOut(): void {
+    if (selectedPage != null) {
+        if (zoomLevel > 0.700) {
+            zoomLevel -= 0.100;
+            updateZoom();
+        }
+    }
+}
+
+function defaultZoom(): void {
+    if (selectedPage != null) {
+        zoomLevel = 1.000;
+        updateZoom();
     }
 }
 
@@ -1468,9 +1494,26 @@ function applyModalEventHandlers(): void {
     });
 }
 
+function autoOpenHelpTab() {
+    const tab = document.getElementById("helpTab");
+    if (tab.getAttribute("aria-expanded") != "true") {
+        $("#helpTab").click();
+    }
+
+    document.querySelectorAll(".my-sidebar-link").forEach(function (item) {
+        item.classList.toggle("active", false);
+    });
+    const page = document.getElementById("firstHelpPage");
+    page.classList.toggle("active", true);
+
+    showUIPage("helpPage");
+    //TODO
+    //loadHelpPage("gettingstarted");
+}
+
 /* IPC Handlers */
 
-api.ipcHandle("updateAvailable", (event, newVersion) => {
+api.ipcHandle("updateAvailable", (event, newVersion: string) => {
     setTimeout(() => {
         document.getElementById("updateBlockText").textContent = `New update available (${newVersion})`;
         $("#updateBlockLI").fadeIn();

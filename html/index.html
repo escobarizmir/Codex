@@ -137,7 +137,7 @@
                                 </li>
                                 <li class="nav-item my-sidebar-item">
                                     <a href="#" class="nav-link indent unselectable"
-                                        onclick="shell.openExternal('https://forms.gle/uDLJpqLbNLcEx1F8A')">
+                                        onclick="api.ipcSend('openFeedbackForm')">
                                         <div class="row">
                                             <div class="col-auto pr-0"><span data-feather="inbox"></span></div>
                                             <div class="col pr-4" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
@@ -151,7 +151,7 @@
 
                         <li id="updateBlockLI" class="nav-item my-sidebar-item" style="display: none;" title="www.codexnotes.com/download">
                             <a id="updateBlock" class="nav-link" href="#" draggable="false"
-                                onclick="shell.openExternal('https://www.codexnotes.com/download')">
+                                onclick="api.ipcSend('openDownloadPage')">
                                 <span data-feather="download" style="color: #269700;"></span>
                                 <span id="updateBlockText">New update available</span>
                             </a>
@@ -233,7 +233,7 @@
                                     <h3>More</h3>
                                 </center>
                                 <div class="py-3">
-                                    <a class="favoriteBlock shadow-sm" onclick="shell.openExternal('https://www.codexnotes.com/')">
+                                    <a class="favoriteBlock shadow-sm" onclick="api.ipcSend('openWebsite')">
                                         <div class="row" style="width: 100%">
                                             <div class="col-auto">
                                                 <span data-feather="globe" style="width: 32px; height: 32px;"></span>
@@ -242,7 +242,7 @@
                                         </div>
                                     </a>
 
-                                    <a class="favoriteBlock shadow-sm" onclick="shell.openExternal('https://codexnotes.com/updates/')">
+                                    <a class="favoriteBlock shadow-sm" onclick="api.ipcSend('openUpdatesPage')">
                                         <div class="row" style="width: 100%">
                                             <div class="col-auto">
                                                 <span data-feather="file-plus" style="width: 32px; height: 32px;"></span>
@@ -260,7 +260,7 @@
                                         </div>
                                     </a>
 
-                                    <a class="favoriteBlock shadow-sm" onclick="shell.openExternal('https://github.com/jcv8000/Codex')">
+                                    <a class="favoriteBlock shadow-sm" onclick="api.ipcSend('openGithub')">
                                         <div class="row" style="width: 100%">
                                             <div class="col-auto">
                                                 <span data-feather="github" style="width: 32px; height: 32px;"></span>
@@ -269,7 +269,7 @@
                                         </div>
                                     </a>
 
-                                    <a class="favoriteBlock shadow-sm" onclick="shell.openExternal('https://github.com/jcv8000/Codex/issues')">
+                                    <a class="favoriteBlock shadow-sm" onclick="api.ipcSend('openGithubIssues')">
                                         <div class="row" style="width: 100%">
                                             <div class="col-auto">
                                                 <span data-feather="alert-circle" style="width: 32px; height: 32px;"></span>
@@ -614,7 +614,7 @@
                                     title="Choose color...">
                             </div>
                             <div class="col-auto">
-                                <span id="newNotebookIconHelp" data-feather="help-circle" href="#" onclick="shell.openExternal('https://www.feathericons.com/')" style="color: #9AA6B3; width: 24px; height: 24px; vertical-align: -15px; cursor: pointer;" title="View all icons at feathericons.com"></span>
+                                <span id="newNotebookIconHelp" data-feather="help-circle" href="#" onclick="api.ipcSend('openFeatherWebsite')" style="color: #9AA6B3; width: 24px; height: 24px; vertical-align: -15px; cursor: pointer;" title="View all icons at feathericons.com"></span>
                             </div>
                         </div>
                         <label class="form-label" for="newNotebookNameInput">Name:</label>
@@ -663,7 +663,7 @@
                                     title="Choose color...">
                             </div>
                             <div class="col-auto">
-                                <span id="editNotebookIconHelp" data-feather="help-circle" href="#" onclick="shell.openExternal('https://www.feathericons.com/')" style="color: #9AA6B3; width: 24px; height: 24px; vertical-align: -15px; cursor: pointer;" title="View all icons at feathericons.com"></span>
+                                <span id="editNotebookIconHelp" data-feather="help-circle" href="#" onclick="api.ipcSend('openFeatherWebsite')" style="color: #9AA6B3; width: 24px; height: 24px; vertical-align: -15px; cursor: pointer;" title="View all icons at feathericons.com"></span>
                             </div>
                         </div>
                         <label class="form-label" for="newNotebookNameInput">Name:</label>

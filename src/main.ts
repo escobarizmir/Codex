@@ -465,3 +465,31 @@ ipcMain.on("isWindowMaximized", (event) => {
 ipcMain.on("nativeThemeShouldUseDarkColors", (event) => {
     event.returnValue = nativeTheme.shouldUseDarkColors;
 });
+
+ipcMain.on("openWebsite", (event) => {
+    shell.openExternal("https://www.codexnotes.com/");
+});
+
+ipcMain.on("openDownloadPage", (event) => {
+    shell.openExternal("https://www.codexnotes.com/download/");
+});
+
+ipcMain.on("openUpdatesPage", (event) => {
+    shell.openExternal("https://www.codexnotes.com/updates/");
+});
+
+ipcMain.on("openGithub", (event) => {
+    shell.openExternal("https://github.com/jcv8000/Codex");
+});
+
+ipcMain.on("openGithubIssues", (event) => {
+    shell.openExternal("https://github.com/jcv8000/Codex/issues");
+});
+
+ipcMain.on("openFeedbackForm", (event) => {
+    shell.openExternal("https://forms.gle/uDLJpqLbNLcEx1F8A");
+});
+
+ipcMain.on("openFeatherWebsite", (event) => {
+    shell.openExternal("https://www.feathericons.com/");
+});
