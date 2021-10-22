@@ -8,11 +8,6 @@ import * as fs from "fs";
 const hljs = require("highlight.js/lib/core");
 hljs.registerLanguage("cpp", require("highlight.js/lib/languages/cpp"));
 
-// TODO: Find a better way to get the userData path and 
-// window.isMaximized() to renderer
-// without using @electron/remote
-const { app, getCurrentWindow } = require("@electron/remote");
-
 const customTitlebar = require("@treverix/custom-electron-titlebar");
 
 /* eslint-enable @typescript-eslint/no-var-requires */
@@ -33,10 +28,8 @@ contextBridge.exposeInMainWorld("mainAPI", {
         ipcRenderer.send(channel, args);
     },
 
-    defaultDataDir: app.getPath("userData"),
-
-    isWindowMaximized: (): void => {
-        getCurrentWindow().isMaximized();
+    ipcSendSync: (channel: string, ...args: any[]): any => {
+        return ipcRenderer.sendSync(channel, args);
     },
 
     fsExistsSync: (path: string): boolean => {
@@ -50,10 +43,6 @@ contextBridge.exposeInMainWorld("mainAPI", {
     fsWriteFileSync: (path: string, data: string): void => {
         fs.writeFileSync(path, data, "utf-8");
     },
-
-    nativeThemeShouldUseDarkColors: (): boolean => { 
-        return nativeTheme.shouldUseDarkColors;
-    }
 
 });
 

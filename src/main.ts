@@ -90,7 +90,7 @@ function createWindow() {
     });
 
     // Enable @electron/remote in preload so we can
-    // send over app.getPath("userData")
+    // use the custom titlebar
     remote.enable(mainWindow.webContents);
     remote.initialize();
 
@@ -429,4 +429,16 @@ ipcMain.on("normalMenu", (event) => {
 
 ipcMain.on("editingMenu", (event) => {
     Menu.setApplicationMenu(editingMenu);
+});
+
+ipcMain.on("defaultDataDir", (event) => {
+    event.returnValue = app.getPath("userData");
+});
+
+ipcMain.on("isWindowMaximized", (event) => {
+    event.returnValue = mainWindow.isMaximized();
+});
+
+ipcMain.on("nativeThemeShouldUseDarkColors", (event) => {
+    event.returnValue = nativeTheme.shouldUseDarkColors;
 });

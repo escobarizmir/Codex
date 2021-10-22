@@ -7,12 +7,10 @@ type _MainAPI = {
     hljsHighlightCpp(text: string): string,
     ipcHandle(channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void): void,
     ipcSend(channel: string, ...args: any[]): void,
-    defaultDataDir: string,
-    isWindowMaximized(): boolean,
+    ipcSendSync(channel: string, ...args: any[]): any,
     fsExistsSync(path: string): boolean,
     fsReadFileSync(path: string): string,
     fsWriteFileSync(path: string, data: string): void,
-    nativeThemeShouldUseDarkColors: boolean
 }
 
 type BridgedWindow = Window & typeof globalThis & {
@@ -33,7 +31,7 @@ class UserPrefs {
     accentColor = "#FF7A27";
     defaultZoom = 1.0;
     defaultMaximized = false;
-    dataDir = api.defaultDataDir;
+    dataDir = defaultDataDir;
     pdfBreakOnH1 = false;
     pdfDarkMode = false;
     openPDFonExport = true;
@@ -86,6 +84,7 @@ let darkStyleLink: HTMLLinkElement;
 
 let save: Save;
 let prefs: UserPrefs;
+const defaultDataDir: string = api.ipcSendSync("defaultDataDir");
 let selectedPage: Page;
 let selectedPageContent: string;
 
@@ -167,9 +166,9 @@ function init() {
 
     // Get user preferences
 
-    if (api.fsExistsSync(api.defaultDataDir + "/prefs.json")) {
+    if (api.fsExistsSync(defaultDataDir + "/prefs.json")) {
         try {
-            const json = api.fsReadFileSync(api.defaultDataDir + "/prefs.json");
+            const json = api.fsReadFileSync(defaultDataDir + "/prefs.json");
             prefs = JSON.parse(json);
 
             fixPrefs();
@@ -218,7 +217,7 @@ function fixPrefs(): void {
         prefs.defaultMaximized = false;
 
     if (prefs.dataDir === undefined)
-        prefs.dataDir = api.defaultDataDir;
+        prefs.dataDir = defaultDataDir;
 
     if (prefs.pdfBreakOnH1 === undefined)
         prefs.pdfBreakOnH1 = false;
@@ -254,14 +253,14 @@ function fixPrefs(): void {
 
 function savePrefs(): void {
     if (canSavePrefs) {
-        prefs.defaultMaximized = api.isWindowMaximized();
+        prefs.defaultMaximized = api.ipcSendSync("isWindowMaximized");
 
         if (destroyOpenedNotebooks) {
             prefs.openedNotebooks = [];
         }
 
         try {
-            api.fsWriteFileSync(api.defaultDataDir + "/prefs.json", JSON.stringify(prefs, null, 2));
+            api.fsWriteFileSync(defaultDataDir + "/prefs.json", JSON.stringify(prefs, null, 2));
         }
         catch (err) {
             console.error(err);
@@ -291,7 +290,7 @@ function applyPrefsAtStart(): void {
     }
     else if (prefs.theme == 2) {
         api.ipcSend("setNativeThemeSource", "system");
-        if (api.nativeThemeShouldUseDarkColors) {
+        if (api.ipcSendSync("nativeThemeShouldUseDarkColors") === true) {
             darkStyleLink = document.createElement("link");
             darkStyleLink.rel = "stylesheet";
             darkStyleLink.type = "text/css";
@@ -338,7 +337,7 @@ function applyPrefsAtStart(): void {
     if (api.fsExistsSync(prefs.dataDir)) {
         document.getElementById("dataDirInput").innerText = prefs.dataDir;
 
-        if (prefs.dataDir == api.defaultDataDir) {
+        if (prefs.dataDir == defaultDataDir) {
             (document.getElementById("revertToDefaultDataDirBtn") as HTMLButtonElement).disabled = true;
             document.getElementById("revertToDefaultDataDirBtn").style.pointerEvents = "none";
             document.getElementById("revertToDefaultDataDirBtnTooltip").title = "You're already in the default location.";
@@ -348,14 +347,14 @@ function applyPrefsAtStart(): void {
         else {
             (document.getElementById("revertToDefaultDataDirBtn") as HTMLButtonElement).disabled = false;
             document.getElementById("revertToDefaultDataDirBtn").style.pointerEvents = "auto";
-            document.getElementById("revertToDefaultDataDirBtnTooltip").title = "Revert to " + api.defaultDataDir;
+            document.getElementById("revertToDefaultDataDirBtnTooltip").title = "Revert to " + defaultDataDir;
             $("#revertToDefaultDataDirBtnTooltip").tooltip("dispose");
             $("#revertToDefaultDataDirBtnTooltip").tooltip();
         }
     }
     else {
-        alert("Your Save location (" + prefs.dataDir + ") could not be accessed. Reverting to the default (" + api.defaultDataDir + ")");
-        prefs.dataDir = api.defaultDataDir;
+        alert("Your Save location (" + prefs.dataDir + ") could not be accessed. Reverting to the default (" + defaultDataDir + ")");
+        prefs.dataDir = defaultDataDir;
         document.getElementById("dataDirInput").innerText = prefs.dataDir;
     }
 
@@ -415,7 +414,7 @@ function applyPrefsRuntime(needsRestart = false): void {
     }
     else if (prefs.theme == 2) {
         api.ipcSend("setNativeThemeSource", "system");
-        if (api.nativeThemeShouldUseDarkColors) {
+        if (api.ipcSendSync("nativeThemeShouldUseDarkColors") === true) {
             darkStyleLink = document.createElement("link");
             darkStyleLink.rel = "stylesheet";
             darkStyleLink.type = "text/css";
@@ -449,7 +448,7 @@ function applyPrefsRuntime(needsRestart = false): void {
     if (api.fsExistsSync(prefs.dataDir)) {
         document.getElementById("dataDirInput").innerText = prefs.dataDir;
 
-        if (prefs.dataDir == api.defaultDataDir) {
+        if (prefs.dataDir == defaultDataDir) {
             (document.getElementById("revertToDefaultDataDirBtn") as HTMLButtonElement).disabled = true;
             document.getElementById("revertToDefaultDataDirBtn").style.pointerEvents = "none";
             document.getElementById("revertToDefaultDataDirBtnTooltip").title = "You're already in the default location.";
@@ -459,13 +458,13 @@ function applyPrefsRuntime(needsRestart = false): void {
         else {
             (document.getElementById("revertToDefaultDataDirBtn") as HTMLButtonElement).disabled = false;
             document.getElementById("revertToDefaultDataDirBtn").style.pointerEvents = "auto";
-            document.getElementById("revertToDefaultDataDirBtnTooltip").title = "Revert to " + api.defaultDataDir;
+            document.getElementById("revertToDefaultDataDirBtnTooltip").title = "Revert to " + defaultDataDir;
             $("#revertToDefaultDataDirBtnTooltip").tooltip("dispose");
             $("#revertToDefaultDataDirBtnTooltip").tooltip();
         }
     }
     else {
-        prefs.dataDir = api.defaultDataDir;
+        prefs.dataDir = defaultDataDir;
         document.getElementById("dataDirInput").innerText = prefs.dataDir;
         alert("The specified save directory could not be accessed. Reverting to default.");
     }
