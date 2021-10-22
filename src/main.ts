@@ -109,6 +109,7 @@ function createWindow() {
         checkForUpdates();
 
     });
+
     // Open the DevTools.
     //mainWindow.webContents.openDevTools();
 
@@ -124,7 +125,7 @@ function checkForUpdates() {
 
                 if (semver.valid(onlineVersion)) {
 
-                    mainWindow.webContents.send("console.log", `UPDATE CHECK\nCurrent version: ${currentVersion}\nLatest version: ${onlineVersion}`);
+                    mainWindow.webContents.send("console.log", `Checking for updates\nCurrent version: ${currentVersion}\nLatest version: ${onlineVersion}`);
 
                     // Check if online version # is greater than current version
                     if (semver.compare(currentVersion, onlineVersion) == -1) {
@@ -388,6 +389,28 @@ editingMenu.append(new MenuItem({
         }
     ]
 }));
+
+// Add the "Toggle Menu Bar" option for linux users
+if (process.platform === "linux") {
+    normalMenu.items[1].submenu.append(new MenuItem({
+        label: "Toggle Menu Bar",
+        click: () => {
+            const current = mainWindow.isMenuBarVisible();
+            mainWindow.setMenuBarVisibility(!current);
+            mainWindow.webContents.send("prefsShowMenuBar", !current);
+        },
+        accelerator: "Ctrl+M"
+    }));
+    editingMenu.items[2].submenu.append(new MenuItem({
+        label: "Toggle Menu Bar",
+        click: () => {
+            const current = mainWindow.isMenuBarVisible();
+            mainWindow.setMenuBarVisibility(!current);
+            mainWindow.webContents.send("prefsShowMenuBar", !current);
+        },
+        accelerator: "Ctrl+M"
+    }));
+}
 
 /*
     IPC Events

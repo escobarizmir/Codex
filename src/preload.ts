@@ -1,6 +1,7 @@
-import { contextBridge, ipcRenderer, IpcRendererEvent, nativeTheme } from "electron";
+import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 import * as feather from "feather-icons";
 import * as fs from "fs";
+import validator from "validator";
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 
@@ -14,10 +15,14 @@ const customTitlebar = require("@treverix/custom-electron-titlebar");
 
 contextBridge.exposeInMainWorld("mainAPI", {
 
-    featherReplace: feather.replace,
+    feather: feather,
 
     hljsHighlightCpp: (text: string): string => {
         return hljs.highlight(text, {language: "cpp", ignoreIllegals: "false"}).value;
+    },
+
+    validatorEscape: (value: string): string => {
+        return validator.escape(value);
     },
 
     ipcHandle: (channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void) => {
@@ -44,13 +49,25 @@ contextBridge.exposeInMainWorld("mainAPI", {
         fs.writeFileSync(path, data, "utf-8");
     },
 
+    fsMkDirSync: (path: string): void => {
+        fs.mkdirSync(path);
+    },
+
 });
 
 // Initialize custom titlebar
 window.addEventListener("DOMContentLoaded", () => {
-    new customTitlebar.Titlebar({
-        backgroundColor: customTitlebar.Color.fromHex("#343A40"),
-            unfocusEffect: true,
-            icon: "../assets/icons/icon.ico"
-    });
+    if (process.platform === "win32") {
+        new customTitlebar.Titlebar({
+            backgroundColor: customTitlebar.Color.fromHex("#343A40"),
+                unfocusEffect: true,
+                icon: "../assets/icons/icon.ico"
+        });
+
+        document.getElementById("editorRibbon").style.marginTop = "40px";
+
+        if (process.platform !== "win32") {
+            document.documentElement.style.setProperty("--titlebar-height", "0px");
+        }
+    }
 });
