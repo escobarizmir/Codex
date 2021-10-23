@@ -83,6 +83,8 @@ const defaultDataDir: string = api.ipcSendSync("defaultDataDir");
 let selectedPage: Page;
 let selectedPageContent: string;
 
+let editorView: any = null;
+
 let rightClickedNotebookIndex: number;
 
 // PAGE INDEX IS LOCAL TO THE NOTEBOOK
@@ -1359,7 +1361,7 @@ function applyModalEventHandlers(): void {
         e.preventDefault();
         const name = (document.getElementById("newNotebookNameInput") as HTMLInputElement).value;
         const color = (document.getElementById("newNotebookColorPicker") as HTMLInputElement).value;
-        const icon = (document.getElementById("newNotebookIconSelect") as HTMLInputElement).value;
+        const icon = (document.getElementById("newNotebookIconSelect") as HTMLSelectElement).value;
         if (name !== "") {
 
             getExpandedNotebookData();
@@ -1376,7 +1378,7 @@ function applyModalEventHandlers(): void {
             document.getElementById("newNotebookNameInput").classList.remove("is-invalid");
             (document.getElementById("newNotebookNameInput") as HTMLInputElement).value = "";
             (document.getElementById("newNotebookColorPicker") as HTMLInputElement).value = "000000";
-            (document.getElementById("newNotebookIconSelect") as HTMLInputElement).value = "book";
+            (document.getElementById("newNotebookIconSelect") as HTMLSelectElement).value = "book";
             document.getElementById("newNotebookIconPreview").setAttribute("data-feather", "book");
             api.feather.replace();
             document.getElementById("newNotebookIconPreview").style.color = "black";
@@ -1400,7 +1402,7 @@ function applyModalEventHandlers(): void {
         e.preventDefault();
         const newName = (document.getElementById("editNotebookNameInput") as HTMLInputElement).value;
         const newColor = (document.getElementById("editNotebookColorPicker") as HTMLInputElement).value;
-        const newIcon = (document.getElementById("editNotebookIconSelect") as HTMLInputElement).value;
+        const newIcon = (document.getElementById("editNotebookIconSelect") as HTMLSelectElement).value;
 
         if (newName !== "") {
             $("#editNotebookModal").modal("hide");
@@ -1494,7 +1496,7 @@ function applyModalEventHandlers(): void {
     });
 }
 
-function autoOpenHelpTab() {
+function autoOpenHelpTab(): void {
     const tab = document.getElementById("helpTab");
     if (tab.getAttribute("aria-expanded") != "true") {
         $("#helpTab").click();
@@ -1509,6 +1511,63 @@ function autoOpenHelpTab() {
     showUIPage("helpPage");
     //TODO
     //loadHelpPage("gettingstarted");
+}
+
+function revertAccentColor(): void {
+    prefs.accentColor = "#FF7A27";
+    (document.getElementById("accentColorPicker") as HTMLInputElement).value = "#FF7A27";
+    document.documentElement.style.setProperty("--accent-color", prefs.accentColor);
+}
+
+function editSelectedNotebook(): void {
+    $("#editNotebookModal").modal("show");
+    (document.getElementById("editNotebookNameInput") as HTMLInputElement).value = save.notebooks[rightClickedNotebookIndex].name;
+    (document.getElementById("editNotebookColorPicker") as HTMLInputElement).value = save.notebooks[rightClickedNotebookIndex].color;
+    (document.getElementById("editNotebookIconSelect") as HTMLSelectElement).value = save.notebooks[rightClickedNotebookIndex].icon;
+    document.getElementById("editNotebookIconPreview").setAttribute("data-feather", save.notebooks[rightClickedNotebookIndex].icon);
+    document.getElementById("editNotebookIconPreview").style.color = save.notebooks[rightClickedNotebookIndex].color;
+    api.feather.replace();
+}
+
+function deleteSelectedNotebook(): void {
+    getExpandedNotebookData();
+    save.notebooks.splice(rightClickedNotebookIndex, 1);
+    saveData();
+    displayNotebooks();
+    showUIPage("homePage");
+
+    document.querySelectorAll(".my-sidebar-link").forEach(function (item) {
+        item.classList.toggle("active", false);
+    });
+    document.getElementById("homeTab").classList.toggle("active", true);
+}
+
+function editSelectedPage(): void {
+    $("#editPageModal").modal("show");
+    (document.getElementById("editPageNameInput") as HTMLInputElement).value = save.notebooks[rightClickedNotebookIndex].pages[rightClickedPageIndex].title;
+}
+
+function deleteSelectedPage(): void {
+    getExpandedNotebookData();
+    save.notebooks[rightClickedNotebookIndex].pages.splice(rightClickedPageIndex, 1);
+    saveData();
+    displayNotebooks();
+
+    showUIPage("homePage");
+
+    document.querySelectorAll(".my-sidebar-link").forEach(function (item) {
+        item.classList.toggle("active", false);
+    });
+    document.getElementById("homeTab").classList.toggle("active", true);
+}
+
+function toggleFavoritePage() {
+    const page = save.notebooks[rightClickedNotebookIndex].pages[rightClickedPageIndex];
+
+    page.favorite = !page.favorite;
+    getExpandedNotebookData();
+    saveData();
+    displayNotebooks();
 }
 
 /* IPC Handlers */

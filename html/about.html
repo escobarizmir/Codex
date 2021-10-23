@@ -6,10 +6,6 @@
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 
-<script>
-    const {shell} = require('electron');
-</script>
-
 <style>
     body {
         background-color: #F8F9FA;
@@ -24,7 +20,7 @@
         <img src="../assets/img/logo.png" style="width: 100%">
         <p><code><b>Version 2.0.0</b></code><br>Made by Josh Vickery</p>
         <br>
-        <span style="font-size: 12px">This work is licensed under a <a rel="license" href="#" onclick="shell.openExternal('https://creativecommons.org/licenses/by-nc/4.0/')">CC BY-NC 4.0 License</a>.</span>
+        <span style="font-size: 12px">This work is licensed under a <a rel="license" href="#" onclick="api.ipcSend('openLicenseWebpage')">CC BY-NC 4.0 License</a>.</span>
         <br><br><br>
         <h3>Acknowledgements</h3>
         <br>

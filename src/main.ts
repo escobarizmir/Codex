@@ -18,6 +18,7 @@ app.disableHardwareAcceleration();
 const currentVersion = "2.0.0";
 let mainWindow: BrowserWindow = null;
 const gotTheLock = app.requestSingleInstanceLock();
+let iconPath = "";
 
 
 //FORCE SINGLE INSTANCE
@@ -62,7 +63,6 @@ app.on("web-contents-created", (event, contents) => {
 function createWindow() {
 
     let useFrame = true;
-    let iconPath = "";
 
     if (process.platform === "win32") {
         useFrame = false;
@@ -115,7 +115,7 @@ function createWindow() {
 
 }
 
-function checkForUpdates() {
+function checkForUpdates(): void {
     try {
         const request = net.request("https://jcv8000.github.io/codex/latestversion.txt");
         request.on("response", (response) => {
@@ -181,6 +181,27 @@ function executeJavascriptInRenderer(js: string): void {
     mainWindow.webContents.executeJavaScript(js + ";0").catch((reason) => {
         errorPoup("Error executing javascript in renderer process", reason.toString());
     });
+}
+
+function openAboutWindow(): void {
+    const about = new BrowserWindow({
+        width: 480,
+        height: 360,
+        resizable: false,
+        webPreferences: {
+            preload: __dirname + "/about_preload.js",
+        },
+        icon: path.join(__dirname, iconPath),
+        title: "About Codex",
+        parent: mainWindow,
+        modal: (process.platform === "darwin" ? false : true),
+        show: false
+    });
+    about.once("ready-to-show", () => {
+        about.show();
+    });
+    about.setMenu(null);
+    about.loadFile("html/about.html");
 }
 
 
@@ -251,7 +272,7 @@ normalMenu.append(new MenuItem({
         },
         {
             label: "About",
-            click: () => executeJavascriptInRenderer("openAboutPage()")
+            click: () => openAboutWindow()
         }
     ]
 }));
@@ -385,7 +406,7 @@ editingMenu.append(new MenuItem({
         },
         {
             label: "About",
-            click: () => executeJavascriptInRenderer("openAboutPage()")
+            click: () => openAboutWindow()
         }
     ]
 }));
@@ -492,4 +513,12 @@ ipcMain.on("openFeedbackForm", (event) => {
 
 ipcMain.on("openFeatherWebsite", (event) => {
     shell.openExternal("https://www.feathericons.com/");
+});
+
+ipcMain.on("openLicenseWebpage", (event) => {
+    shell.openExternal("https://creativecommons.org/licenses/by-nc/4.0/");
+});
+
+ipcMain.on("openAboutWindow", (event) => {
+    openAboutWindow();
 });
