@@ -1976,7 +1976,7 @@ function openAboutPage() {
 			contextIsolation: false
 		},
 		parent: remote.getCurrentWindow(),
-		modal: true,
+		modal: (process.platform === "darwin" ? false : true),
 		show: false
 	});
 	about.once("ready-to-show", () => {
