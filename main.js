@@ -1,5 +1,7 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, Menu, dialog, nativeTheme } = require('electron')
+const remote = require("@electron/remote/main");
+const contextMenu = require("electron-context-menu");
 
 app.commandLine.appendSwitch("disable-http-cache");
 
@@ -73,8 +75,6 @@ function createWindow() {
         minHeight: 500,
         webPreferences: {
             nodeIntegration: true,
-            enableRemoteModule: true,
-            worldSafeExecuteJavaScript: true,
             contextIsolation: false
         },
         icon: __dirname + iconPath,
@@ -121,6 +121,14 @@ function createWindow() {
         }
 
     })
+
+    contextMenu({
+        showSearchWithGoogle: false,
+        showLookUpSelection: false
+    });
+
+    remote.enable(mainWindow.webContents);
+    remote.initialize();
 
     // and load the index.html of the app.
     mainWindow.loadFile('index.html')

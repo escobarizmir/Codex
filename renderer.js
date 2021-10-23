@@ -1,8 +1,9 @@
 'use strict';
 
-const { remote, shell, ipcRenderer } = require('electron');
+const { shell, ipcRenderer } = require('electron');
+const remote = require("@electron/remote");
 const fs = require('fs');
-const customTitlebar = require('custom-electron-titlebar');
+const customTitlebar = require('@treverix/custom-electron-titlebar');
 const defaultDataDir = remote.app.getPath("userData");
 const { EditorState } = require("prosemirror-state");
 const { EditorView } = require("prosemirror-view");
@@ -12,7 +13,6 @@ const { Schema } = require('prosemirror-model');
 const { schema } = require('./prosemirror/schema');
 const { tableNodes } = require('prosemirror-tables');
 const { addListNodes } = require('prosemirror-schema-list');
-const contextMenu = require('electron-context-menu');
 const { customMarkdownSerializer } = require('./prosemirror/md-serializer');
 const validator = require('validator');
 
@@ -187,11 +187,6 @@ function init() {
             event.preventDefault();
         }
     })
-
-    contextMenu({
-        showSearchWithGoogle: false,
-        showLookUpSelection: false
-    });
 
     if (remote.process.platform === 'win32') {
         titlebar = new customTitlebar.Titlebar({
