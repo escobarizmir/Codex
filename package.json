@@ -9,6 +9,10 @@
         "start": "electron .",
         "dist": "electron-builder"
     },
+    "private": "true",
+    "engines": {
+        "node": ">=12.0.0"
+    },
     "build": {
         "appId": "io.github.jcv8000.codex",
         "productName": "Codex",
@@ -29,7 +33,7 @@
                 "sha256",
                 "sha1"
             ],
-            "signAndEditExecutable": true,
+            "signAndEditExecutable": "true",
             "publisherName": "Joshua Vickery"
         },
         "nsis": {
@@ -56,7 +60,8 @@
     },
     "license": "CC-BY-NC-4.0",
     "devDependencies": {
-        "electron": "^15.3.0"
+        "electron": "^15.3.0",
+        "eslint": "^8.1.0"
     },
     "dependencies": {
         "@benrbray/prosemirror-math": "^0.2.2",
