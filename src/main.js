@@ -8,7 +8,7 @@ app.commandLine.appendSwitch("disable-http-cache");
 
 let mainWindow = null;
 
-const currentVersion = "1.4.1";
+const currentVersion = "1.5.0";
 
 const gotTheLock = app.requestSingleInstanceLock();
 
