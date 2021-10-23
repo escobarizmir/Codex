@@ -39,7 +39,9 @@
         "nsis": {
             "oneClick": "false",
             "allowToChangeInstallationDirectory": "true",
-            "shortcutName": "Codex"
+            "shortcutName": "Codex",
+            "installerSidebar": "assets/img/installerSidebar.bmp",
+            "uninstallerSidebar": "assets/img/installerSidebar.bmp"
         },
         "linux": {
             "target": [
