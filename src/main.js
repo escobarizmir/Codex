@@ -2,13 +2,13 @@
 const { app, BrowserWindow, Menu, dialog, net } = require("electron");
 const remote = require("@electron/remote/main");
 const contextMenu = require("electron-context-menu");
+const path = require("path");
 
 app.commandLine.appendSwitch("disable-http-cache");
 
 let mainWindow = null;
 
 const currentVersion = "1.4.1";
-
 
 const gotTheLock = app.requestSingleInstanceLock();
 
@@ -57,15 +57,14 @@ function createWindow() {
 
 	if (process.platform === "win32") {
 		useFrame = false;
-		iconPath = "/icons/icon.ico";
+		iconPath = "../assets/icons/icon.ico";
 	}
 	else if (process.platform === "linux") {
-		iconPath = "/icons/64x64.png";
+		iconPath = "../assets/icons/64x64.png";
 	}
 	else if (process.platform === "darwin") {
-		iconPath = "/icons/icon.icns";
+		iconPath = "../assets/icons/icon.icns";
 	}
-
 
 	mainWindow = new BrowserWindow({
 		width: 1280,
@@ -77,7 +76,7 @@ function createWindow() {
 			nodeIntegration: true,
 			contextIsolation: false
 		},
-		icon: __dirname + iconPath,
+		icon: path.join(__dirname, iconPath),
 		show: false,
 		title: "Codex"
 	});
@@ -130,7 +129,7 @@ function createWindow() {
 	remote.initialize();
 
 	// and load the index.html of the app.
-	mainWindow.loadFile("index.html");
+	mainWindow.loadFile("src/index.html");
 
 	// Open the DevTools.
 	//mainWindow.webContents.openDevTools()

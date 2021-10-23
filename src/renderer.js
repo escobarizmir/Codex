@@ -2,6 +2,7 @@
 
 const bootstrap = require("bootstrap");
 const $ = require("jquery");
+const path = require("path");
 const feather = require("feather-icons");
 const { shell, ipcRenderer } = require("electron");
 const remote = require("@electron/remote");
@@ -194,7 +195,7 @@ function init() {
 		titlebar = new customTitlebar.Titlebar({
 			backgroundColor: customTitlebar.Color.fromHex("#343A40"),
 			unfocusEffect: true,
-			icon: "./icons/icon.ico"
+			icon: "../assets/icons/icon.ico"
 		});
 
 
@@ -826,7 +827,7 @@ function applyPrefsFromFile() {
 
 	document.getElementById("codeStyleSelect").value = prefs.codeStyle;
 	//document.getElementById('codeStyleLink').href = `hljs_styles/${prefs.codeStyle}.css`;
-	document.getElementById("codeStyleLink").href = `./node_modules/highlight.js/styles/${prefs.codeStyle}.css`;
+	document.getElementById("codeStyleLink").href = `../node_modules/highlight.js/styles/${prefs.codeStyle}.css`;
 
 	if (lightThemes.includes(prefs.codeStyle)) {
 		document.documentElement.style.setProperty("--code-overlay-bg-brightness", "0.95");
@@ -883,7 +884,7 @@ function applyPrefsFromFile() {
 
 	$("#showLanguageOverlayCheck").prop("checked", prefs.showCodeOverlay);
 	if (prefs.showCodeOverlay === true) {
-		document.getElementById("codeOverlayLink").href = "css/codeoverlay.css";
+		document.getElementById("codeOverlayLink").href = "../css/codeoverlay.css";
 	}
 
 	$("#codeWordWrapCheck").prop("checked", prefs.codeWordWrap);
@@ -904,7 +905,7 @@ function applyPrefsRuntime(needsRestart = false) {
 
 	prefs.codeStyle = document.getElementById("codeStyleSelect").value;
 	//document.getElementById('codeStyleLink').href = `hljs_styles/${prefs.codeStyle}.css`;
-	document.getElementById("codeStyleLink").href = `./node_modules/highlight.js/styles/${prefs.codeStyle}.css`;
+	document.getElementById("codeStyleLink").href = `../node_modules/highlight.js/styles/${prefs.codeStyle}.css`;
 
 	if (lightThemes.includes(prefs.codeStyle)) {
 		document.documentElement.style.setProperty("--code-overlay-bg-brightness", "0.95");
@@ -1005,7 +1006,7 @@ function applyPrefsRuntime(needsRestart = false) {
 
 	prefs.showCodeOverlay = $("#showLanguageOverlayCheck").is(":checked");
 	if (prefs.showCodeOverlay === true) {
-		document.getElementById("codeOverlayLink").href = "css/codeoverlay.css";
+		document.getElementById("codeOverlayLink").href = "../css/codeoverlay.css";
 	}
 	else {
 		document.getElementById("codeOverlayLink").href = "";
@@ -1736,7 +1737,7 @@ function showHelpPage() {
 }
 
 function loadHelpPage(title) {
-	document.getElementById("helpContent").innerHTML = fs.readFileSync(__dirname + "/docs/" + title + "/index.html", "utf8");
+	document.getElementById("helpContent").innerHTML = fs.readFileSync(path.join(__dirname, "../docs/" + title + ".html"), "utf8");
 	feather.replace();
 }
 
@@ -1968,12 +1969,10 @@ function openAboutPage() {
 		width: 480,
 		height: 360,
 		resizable: false,
-		icon: __dirname + "/icons/icon.ico",
+		icon: path.join(__dirname, "../assets/icons/icon.ico"),
 		title: "About Codex",
 		webPreferences: {
 			nodeIntegration: true,
-			enableRemoteModule: false,
-			worldSafeExecuteJavaScript: true,
 			contextIsolation: false
 		},
 		parent: remote.getCurrentWindow(),
@@ -1984,7 +1983,7 @@ function openAboutPage() {
 		about.show();
 	});
 	about.setMenu(null);
-	about.loadFile("about.html");
+	about.loadFile("src/about.html");
 }
 
 function toggleFavoritePage() {
@@ -2194,10 +2193,10 @@ async function printPage(content, path, disableOpening = false) {
 		show: false,
 		backgroundColor: "#414950"
 	});
-	workerWindow.loadFile("pdf.html");
+	workerWindow.loadFile("src/pdf.html");
 	await workerWindow.webContents.executeJavaScript(`document.body.innerHTML = \`${content}\``);
 	//await workerWindow.webContents.executeJavaScript(`document.getElementById('codeStyleLink').href = 'hljs_styles/${prefs.codeStyle}.css';`);
-	await workerWindow.webContents.executeJavaScript(`document.getElementById('codeStyleLink').href = './node_modules/highlight.js/styles/${prefs.codeStyle}.css';`);
+	await workerWindow.webContents.executeJavaScript(`document.getElementById('codeStyleLink').href = '../node_modules/highlight.js/styles/${prefs.codeStyle}.css';`);
 
 
 	/*if (prefs.pdfDarkMode == true) {
