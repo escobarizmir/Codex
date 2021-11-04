@@ -2,7 +2,7 @@
 
 @font-face {
     font-family: 'Fira-Mono';
-    src: url('../font/FiraMono-Regular.ttf') format('truetype');
+    src: url('../assets/fonts/FiraMono-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: monospace;
 }
@@ -14,7 +14,7 @@
     --accent-color: #FF7A27;
     --editor-scale: 1.0;
     --footer-height: 24px;
-    --code-white-space: 'pre';
+    --code-white-space: pre;
 }
 
 body {
