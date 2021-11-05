@@ -713,6 +713,13 @@ export function showUIPage(id: "homePage" | "settingsPage" | "helpPage" | "edito
 
         document.getElementById("mainContainer").scrollTo(0, 0);
     }
+
+	if (id == "editorPage") {
+		api.ipcSend("editingMenu");
+	}
+	else {
+		api.ipcSend("normalMenu");
+	}
 }
 
 export function zoomIn(): void {

@@ -468,10 +468,12 @@ ipcMain.on("exit", (event) => {
 
 ipcMain.on("normalMenu", (event) => {
     Menu.setApplicationMenu(normalMenu);
+	mainWindow.webContents.send("updateMenubar");
 });
 
 ipcMain.on("editingMenu", (event) => {
     Menu.setApplicationMenu(editingMenu);
+	mainWindow.webContents.send("updateMenubar");
 });
 
 ipcMain.on("defaultDataDir", (event) => {

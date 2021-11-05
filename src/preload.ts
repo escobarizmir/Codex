@@ -9,6 +9,8 @@ hljs.registerLanguage("cpp", require("highlight.js/lib/languages/cpp"));
 
 const customTitlebar = require("@treverix/custom-electron-titlebar");
 
+const remote = require("@electron/remote");
+
 /* eslint-enable @typescript-eslint/no-var-requires */
 
 export type MainAPI = {
@@ -65,11 +67,15 @@ window.addEventListener("DOMContentLoaded", () => {
     document.getElementById("exampleCode").innerHTML = hljs.highlight(document.getElementById("exampleCode").innerText, {language: "cpp", ignoreIllegals: "false"}).value;
 
     if (process.platform === "win32") {
-        new customTitlebar.Titlebar({
+        const titlebar = new customTitlebar.Titlebar({
             backgroundColor: customTitlebar.Color.fromHex("#343A40"),
                 unfocusEffect: true,
                 icon: "../assets/icons/icon.ico"
         });
+
+		ipcRenderer.on("updateMenubar", (event) => {
+			titlebar.updateMenu(remote.Menu.getApplicationMenu());
+		});
 
         document.getElementById("editorRibbon").style.marginTop = "40px";
 

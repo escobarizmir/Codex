@@ -18,5 +18,9 @@ module.exports = {
 		extensions: [".tsx", ".ts", ".js"],
 	},
 	mode: "production",
-	devtool: "source-map"
+	devtool: "source-map",
+	performance: {
+		maxEntrypointSize: 4250000, // 4 MB
+		maxAssetSize: 4250000
+	}
 };
