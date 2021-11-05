@@ -1,3 +1,4 @@
+import { MainAPI } from "./preload";
 import * as feather from "feather-icons";
 import validator from "validator";
 import { EditorState } from "prosemirror-state";
@@ -15,21 +16,11 @@ const mySchema = new Schema({
 
 /* Expose the variables/functions sent through the preload.ts */
 
-type _MainAPI = {
-    ipcHandle(channel: string, listener: (event: any, ...args: any[]) => void): void,
-    ipcSend(channel: string, ...args: any[]): void,
-    ipcSendSync(channel: string, ...args: any[]): any,
-    fsExistsSync(path: string): boolean,
-    fsReadFileSync(path: string): string,
-    fsWriteFileSync(path: string, data: string): void,
-    fsMkDirSync(path: string): void,
-}
-
 type BridgedWindow = Window & typeof globalThis & {
     mainAPI: any
 }
 
-export const api: _MainAPI = (window as BridgedWindow).mainAPI;
+export const api: MainAPI = (window as BridgedWindow).mainAPI.api;
 
 
 

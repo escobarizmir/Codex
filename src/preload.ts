@@ -11,9 +11,18 @@ const customTitlebar = require("@treverix/custom-electron-titlebar");
 
 /* eslint-enable @typescript-eslint/no-var-requires */
 
-contextBridge.exposeInMainWorld("mainAPI", {
+export type MainAPI = {
+	ipcHandle(channel: string, listener: (event: any, ...args: any[]) => void): void,
+    ipcSend(channel: string, ...args: any[]): void,
+    ipcSendSync(channel: string, ...args: any[]): any,
+    fsExistsSync(path: string): boolean,
+    fsReadFileSync(path: string): string,
+    fsWriteFileSync(path: string, data: string): void,
+    fsMkDirSync(path: string): void,
+}
 
-    ipcHandle: (channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void) => {
+const api: MainAPI = {
+	ipcHandle: (channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void) => {
         ipcRenderer.on(channel, listener);
     },
 
@@ -40,6 +49,11 @@ contextBridge.exposeInMainWorld("mainAPI", {
     fsMkDirSync: (path: string): void => {
         fs.mkdirSync(path);
     },
+};
+
+contextBridge.exposeInMainWorld("mainAPI", {
+
+	api: api,
 
 });
 
