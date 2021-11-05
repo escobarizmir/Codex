@@ -1,10 +1,10 @@
 import { MainAPI } from "./preload";
 import * as feather from "feather-icons";
-import validator from "validator";
+import validatorEscape from "validator/es/lib/escape";
 import { EditorState } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 import { exampleSetup } from "./prosemirror/setup";
-import { NodeType, Schema } from "prosemirror-model";
+import { Schema } from "prosemirror-model";
 import { schema } from "./prosemirror/schema";
 import { tableNodes } from "prosemirror-tables";
 import { addListNodes } from "prosemirror-schema-list";
@@ -21,8 +21,6 @@ type BridgedWindow = Window & typeof globalThis & {
 }
 
 export const api: MainAPI = (window as BridgedWindow).mainAPI.api;
-
-
 
 /* Type definitions */
 
@@ -861,9 +859,9 @@ export function addNotebookToList(index: number) {
     a.innerHTML = `
         <div class="row">
             <div class="col-auto pr-0">
-                <span data-feather="${validator.escape(notebook.icon)}" style="color: ${notebook.color}"></span>
+                <span data-feather="${validatorEscape(notebook.icon)}" style="color: ${notebook.color}"></span>
             </div>
-            <div class="col pr-1" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${validator.escape(notebook.name)}</div>
+            <div class="col pr-1" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${validatorEscape(notebook.name)}</div>
             <div class="col-auto" style="padding-right: 20px">
                 <span class="caret"></span>
             </div>
@@ -1029,7 +1027,7 @@ export function addPageToAList(notebookIndex: number, index: number): void {
             <div class="col-auto pr-0">
                 <span data-feather="file-text"></span>
             </div>
-            <div class="col pr-1" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${validator.escape(page.title)}</div>
+            <div class="col pr-1" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${validatorEscape(page.title)}</div>
             <div class="col-auto" style="padding-right: 13px">
                 <span data-feather="star" style="width: 14px; height: 14px; color: orange; vertical-align: -2px"></span>
             </div>
@@ -1042,7 +1040,7 @@ export function addPageToAList(notebookIndex: number, index: number): void {
             <div class="col-auto pr-0">
                 <span data-feather="file-text"></span>
             </div>
-            <div class="col pr-4" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${validator.escape(page.title)}</div>
+            <div class="col pr-4" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${validatorEscape(page.title)}</div>
         </div>
         `;
     }
@@ -1295,9 +1293,9 @@ export function updateFavoritesSection(): void {
         a.innerHTML = `        
         <div class="row" style="width: 100%">
             <div class="col-auto">
-                <span data-feather="${validator.escape(parent.icon)}" style="width: 32px; height: 32px; color: ${parent.color}"></span>
+                <span data-feather="${validatorEscape(parent.icon)}" style="width: 32px; height: 32px; color: ${parent.color}"></span>
             </div>
-            <div class="col" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; font-weight: 500; vertical-align: middle; line-height: 34px;">${validator.escape(page.title)}</div>
+            <div class="col" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; font-weight: 500; vertical-align: middle; line-height: 34px;">${validatorEscape(page.title)}</div>
             <div class="col-auto" style="width: 32px">
                 <span data-feather="star" style="width: 24px; height: 24px; color: orange; vertical-align: -12px"></span>
             </div>
