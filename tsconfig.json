@@ -3,6 +3,7 @@
         "allowJs": true,
 		"module": "ES2015",
         "moduleResolution": "Node",
+		"skipLibCheck": true,
         "noImplicitAny": true,
         "sourceMap": true,
         "baseUrl": ".",

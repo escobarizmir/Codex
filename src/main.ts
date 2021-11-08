@@ -2,14 +2,8 @@ import { app, BrowserWindow, dialog, net, MessageBoxOptions, ipcMain, nativeThem
 import * as path from "path";
 import validator from "validator";
 import * as semver from "semver";
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const remote = require("@electron/remote/main");
-
-// TODO: This package as of 3.1.1 has a broken type file that won't let me compile with TS.
-//       When it gets fixed turn this back into a normal TS import.
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const contextMenu = require("electron-context-menu");
+import * as remote from "@electron/remote/main";
+import * as contextMenu from "electron-context-menu";
 
 // This makes sure we get a non-cached verison of the "latestversion.txt" file for the update check
 app.commandLine.appendSwitch("disable-http-cache");

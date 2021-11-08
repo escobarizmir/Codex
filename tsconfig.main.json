@@ -3,6 +3,7 @@
         "allowJs": true,
 		"module": "CommonJS",
         "moduleResolution": "Node",
+		"skipLibCheck": true,
         "noImplicitAny": true,
         "sourceMap": true,
         "baseUrl": ".",

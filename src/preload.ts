@@ -1,17 +1,8 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 import * as fs from "fs";
-
-/* eslint-disable @typescript-eslint/no-var-requires */
-
-// Just load the HLJS core library and the C++ language
-const hljs = require("highlight.js/lib/core");
-hljs.registerLanguage("cpp", require("highlight.js/lib/languages/cpp"));
-
-const customTitlebar = require("@treverix/custom-electron-titlebar");
-
-const remote = require("@electron/remote");
-
-/* eslint-enable @typescript-eslint/no-var-requires */
+import * as remote from "@electron/remote";
+import {Titlebar, Color} from "@treverix/custom-electron-titlebar";
+import * as hljs from "highlight.js";
 
 export type MainAPI = {
 	ipcHandle(channel: string, listener: (event: any, ...args: any[]) => void): void,
@@ -54,21 +45,19 @@ const api: MainAPI = {
 };
 
 contextBridge.exposeInMainWorld("mainAPI", {
-
-	api: api,
-
+	api: api
 });
 
-// Initialize custom titlebar
+// Initialize custom titlebar and highlight example code
 window.addEventListener("DOMContentLoaded", () => {
 
 	// Set up example code block in Settings page and highlight it
     document.getElementById("exampleCode").innerHTML = "//EXAMPLE CODE BLOCK\n#include &lt;iostream&gt;\n\nint main(int argc, char *argv[]) {\n\tfor (auto i = 0; i &lt; 0xFFFF; i++)\n\t\tcout &lt;&lt; \"Hello, World!\" &lt;&lt; endl;\n\treturn -2e3 + 12l;\n}";
-    document.getElementById("exampleCode").innerHTML = hljs.highlight(document.getElementById("exampleCode").innerText, {language: "cpp", ignoreIllegals: "false"}).value;
+    document.getElementById("exampleCode").innerHTML = hljs.highlight(document.getElementById("exampleCode").innerText, {language: "cpp", ignoreIllegals: false}).value;
 
     if (process.platform === "win32") {
-        const titlebar = new customTitlebar.Titlebar({
-            backgroundColor: customTitlebar.Color.fromHex("#343A40"),
+        const titlebar = new Titlebar({
+            backgroundColor: Color.fromHex("#343A40"),
                 unfocusEffect: true,
                 icon: "../assets/icons/icon.ico"
         });
