@@ -6,10 +6,12 @@
     "repository": "https://github.com/jcv8000/Codex",
     "main": "dist/main.js",
     "scripts": {
-        "start": "tsc --project tsconfig.main.json && npx webpack && npx electron .",
-        "compile": "tsc --project tsconfig.main.json && npx webpack",
-        "serve": "electron .",
-        "dist": "electron-builder"
+        "compile-main": "tsc --project tsconfig.main.json",
+		"compile-renderer": "webpack",
+		"compile-all": "tsc --project tsconfig.main.json && npx webpack",
+		"serve": "electron .",
+        "dist": "electron-builder",
+		"start": "tsc --project tsconfig.main.json && npx webpack && npx electron ."
     },
     "build": {
         "appId": "io.github.jcv8000.codex",
