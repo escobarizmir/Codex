@@ -4,6 +4,7 @@ import validator from "validator";
 import * as semver from "semver";
 import * as remote from "@electron/remote/main";
 import * as contextMenu from "electron-context-menu";
+import * as fs from "fs";
 
 // This makes sure we get a non-cached verison of the "latestversion.txt" file for the update check
 app.commandLine.appendSwitch("disable-http-cache");
@@ -220,11 +221,11 @@ normalMenu.append(new MenuItem({
         {
             label: "Toggle Sidebar",
             accelerator: "CmdOrCtrl+D",
-            click: () => executeJavascriptInRenderer("toggleSidebar(null)")
+            click: () => executeJavascriptInRenderer("renderer.toggleSidebar(null)")
         },
         {
             label: "Reset Sidebar Width",
-            click: () => executeJavascriptInRenderer("resizeSidebar(275)")
+            click: () => executeJavascriptInRenderer("renderer.resizeSidebar(275)")
         },
         {
             type: "separator"
@@ -243,7 +244,7 @@ normalMenu.append(new MenuItem({
         {
             label: "Help",
             accelerator: "F1",
-            click: () => executeJavascriptInRenderer("autoOpenHelpTab()")
+            click: () => executeJavascriptInRenderer("renderer.autoOpenHelpTab()")
         },
         {
             label: "Website",
@@ -280,7 +281,7 @@ editingMenu.append(new MenuItem({
         {
             label: "Save Page",
             accelerator: "CmdOrCtrl+S",
-            click: () => executeJavascriptInRenderer("saveSelectedPage(true)")
+            click: () => executeJavascriptInRenderer("renderer.saveSelectedPage(true)")
         },
         {
             type: "separator"
@@ -288,11 +289,11 @@ editingMenu.append(new MenuItem({
         {
             label: "Export page to PDF...",
             accelerator: "CmdOrCtrl+P",
-            click: () => executeJavascriptInRenderer("printCurrentPage()")
+            click: () => executeJavascriptInRenderer("renderer.printCurrentPage()")
         },
         {
             label: "Export page to Markdown...",
-            click: () => executeJavascriptInRenderer("exportCurrentPageToMarkdown()")
+            click: () => executeJavascriptInRenderer("renderer.exportCurrentPageToMarkdown()")
         },
         {
             type: "separator"
@@ -331,17 +332,17 @@ editingMenu.append(new MenuItem({
         {
             label: "Zoom In",
             accelerator: "CmdOrCtrl+=",
-            click: () => executeJavascriptInRenderer("zoomIn()")
+            click: () => executeJavascriptInRenderer("renderer.zoomIn()")
         },
         {
             label: "Zoom Out",
             accelerator: "CmdOrCtrl+-",
-            click: () => executeJavascriptInRenderer("zoomOut()")
+            click: () => executeJavascriptInRenderer("renderer.zoomOut()")
         },
         {
             label: "Restore Default Zoom",
             accelerator: "CmdOrCtrl+R",
-            click: () => executeJavascriptInRenderer("defaultZoom()")
+            click: () => executeJavascriptInRenderer("renderer.defaultZoom()")
         },
         {
             type: "separator"
@@ -349,16 +350,16 @@ editingMenu.append(new MenuItem({
         {
             label: "Toggle Sidebar",
             accelerator: "CmdOrCtrl+D",
-            click: () => executeJavascriptInRenderer("toggleSidebar(null)")
+            click: () => executeJavascriptInRenderer("renderer.toggleSidebar(null)")
         },
         {
             label: "Reset Sidebar Width",
-            click: () => executeJavascriptInRenderer("resizeSidebar(275)")
+            click: () => executeJavascriptInRenderer("renderer.resizeSidebar(275)")
         },
         {
             label: "Toggle Editor Toolbar",
             accelerator: "CmdOrCtrl+T",
-            click: () => executeJavascriptInRenderer("toggleEditorRibbon()")
+            click: () => executeJavascriptInRenderer("renderer.toggleEditorRibbon()")
         },
         {
             type: "separator"
@@ -377,7 +378,7 @@ editingMenu.append(new MenuItem({
         {
             label: "Help",
             accelerator: "F1",
-            click: () => executeJavascriptInRenderer("autoOpenHelpTab()")
+            click: () => executeJavascriptInRenderer("renderer.autoOpenHelpTab()")
         },
         {
             label: "Website",
@@ -469,6 +470,13 @@ ipcMain.on("editingMenu", (event) => {
 
 ipcMain.on("defaultDataDir", (event) => {
     event.returnValue = app.getPath("userData");
+});
+
+ipcMain.on("openDataDir", (event, dataDir: string) => {
+    dataDir = dataDir.toString();
+    if (fs.existsSync(dataDir) && fs.lstatSync(dataDir).isDirectory()) {
+        shell.openExternal(dataDir);
+    }
 });
 
 ipcMain.on("isWindowMaximized", (event) => {

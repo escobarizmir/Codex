@@ -1594,6 +1594,40 @@ export function loadPage(notebookIndex: number, pageIndex: number) {
     //window.view.focus();
 }
 
+export function saveSelectedPage(showIndicator = false) {
+    if (selectedPage != null && canSaveData) {
+
+        try {
+            const cont = JSON.stringify(editorView.state.doc.toJSON());
+
+            api.fsWriteFileSync(prefs.dataDir + "/notes/" + selectedPage.fileName, cont);
+
+            let title = selectedPage.title;
+            if (title.length > 40) {
+                title = title.substring(0, 40) + "...";
+            }
+
+            if (showIndicator) {
+                clearTimeout(fadeInSaveIndicator);
+
+                document.getElementById("saveIndicatorTitle").textContent = `"${title}" saved!`;
+                document.getElementById("saveIndicator").style.opacity = "1";
+
+                fadeInSaveIndicator = setTimeout(() => {
+                    document.getElementById("saveIndicator").style.opacity = "0";
+                }, 3000);
+            }
+        }
+        catch (err) {
+            errorPopup("Failed to save page", err.toString());
+        }
+    }
+}
+
+export function openDataDir() {
+    api.ipcSend("openDataDir", prefs.dataDir);
+}
+
 /* IPC Handlers */
 
 api.ipcHandle("updateAvailable", (event, newVersion: string) => {
