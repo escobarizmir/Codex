@@ -178,12 +178,9 @@ function executeJavascriptInRenderer(js: string): void {
 
 function openAboutWindow(): void {
     const about = new BrowserWindow({
-        width: 480,
-        height: 360,
+        width: 680,
+        height: 380,
         resizable: false,
-        webPreferences: {
-            preload: __dirname + "/about_preload.js",
-        },
         icon: path.join(__dirname, iconPath),
         title: "About Codex",
         parent: mainWindow,
