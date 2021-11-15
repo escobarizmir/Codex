@@ -139,7 +139,7 @@
                                 </li>
                                 <li class="nav-item my-sidebar-item">
                                     <a href="#" class="nav-link indent unselectable"
-                                        onclick="renderer.api.ipcSend('openFeedbackForm')">
+                                        onclick="renderer.openFeedbackForm()">
                                         <div class="row">
                                             <div class="col-auto pr-0"><span data-feather="inbox"></span></div>
                                             <div class="col pr-4" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
@@ -153,7 +153,7 @@
 
                         <li id="updateBlockLI" class="nav-item my-sidebar-item" style="display: none;" title="www.codexnotes.com/download">
                             <a id="updateBlock" class="nav-link" href="#" draggable="false"
-                                onclick="renderer.api.ipcSend('openDownloadPage')">
+                                onclick="renderer.openDownloadPage()">
                                 <span data-feather="download" style="color: #269700;"></span>
                                 <span id="updateBlockText">New update available</span>
                             </a>
@@ -235,7 +235,7 @@
                                     <h3>More</h3>
                                 </center>
                                 <div class="py-3">
-                                    <a class="favoriteBlock shadow-sm" onclick="renderer.api.ipcSend('openWebsite')">
+                                    <a class="favoriteBlock shadow-sm" onclick="renderer.openWebsite()">
                                         <div class="row" style="width: 100%">
                                             <div class="col-auto">
                                                 <span data-feather="globe" style="width: 32px; height: 32px;"></span>
@@ -244,7 +244,7 @@
                                         </div>
                                     </a>
 
-                                    <a class="favoriteBlock shadow-sm" onclick="renderer.api.ipcSend('openUpdatesPage')">
+                                    <a class="favoriteBlock shadow-sm" onclick="renderer.openUpdatesPage()">
                                         <div class="row" style="width: 100%">
                                             <div class="col-auto">
                                                 <span data-feather="file-plus" style="width: 32px; height: 32px;"></span>
@@ -262,7 +262,7 @@
                                         </div>
                                     </a>
 
-                                    <a class="favoriteBlock shadow-sm" onclick="renderer.api.ipcSend('openGithub')">
+                                    <a class="favoriteBlock shadow-sm" onclick="renderer.openGithub()">
                                         <div class="row" style="width: 100%">
                                             <div class="col-auto">
                                                 <span data-feather="github" style="width: 32px; height: 32px;"></span>
@@ -271,7 +271,7 @@
                                         </div>
                                     </a>
 
-                                    <a class="favoriteBlock shadow-sm" onclick="renderer.api.ipcSend('openGithubIssues')">
+                                    <a class="favoriteBlock shadow-sm" onclick="renderer.openGithubIssues()">
                                         <div class="row" style="width: 100%">
                                             <div class="col-auto">
                                                 <span data-feather="alert-circle" style="width: 32px; height: 32px;"></span>
@@ -616,7 +616,7 @@
                                     title="Choose color...">
                             </div>
                             <div class="col-auto">
-                                <span id="newNotebookIconHelp" data-feather="help-circle" href="#" onclick="renderer.api.ipcSend('openFeatherWebsite')" style="color: #9AA6B3; width: 24px; height: 24px; vertical-align: -15px; cursor: pointer;" title="View all icons at feathericons.com"></span>
+                                <span id="newNotebookIconHelp" data-feather="help-circle" href="#" onclick="renderer.openFeatherWebsite()" style="color: #9AA6B3; width: 24px; height: 24px; vertical-align: -15px; cursor: pointer;" title="View all icons at feathericons.com"></span>
                             </div>
                         </div>
                         <label class="form-label" for="newNotebookNameInput">Name:</label>
@@ -665,7 +665,7 @@
                                     title="Choose color...">
                             </div>
                             <div class="col-auto">
-                                <span id="editNotebookIconHelp" data-feather="help-circle" href="#" onclick="renderer.api.ipcSend('openFeatherWebsite')" style="color: #9AA6B3; width: 24px; height: 24px; vertical-align: -15px; cursor: pointer;" title="View all icons at feathericons.com"></span>
+                                <span id="editNotebookIconHelp" data-feather="help-circle" href="#" onclick="renderer.openFeatherWebsite()" style="color: #9AA6B3; width: 24px; height: 24px; vertical-align: -15px; cursor: pointer;" title="View all icons at feathericons.com"></span>
                             </div>
                         </div>
                         <label class="form-label" for="newNotebookNameInput">Name:</label>

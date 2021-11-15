@@ -20,7 +20,7 @@ type BridgedWindow = Window & typeof globalThis & {
     mainAPI: any
 }
 
-export const api: MainAPI = (window as BridgedWindow).mainAPI.api;
+const api: MainAPI = (window as BridgedWindow).mainAPI.api;
 
 /* Type definitions */
 
@@ -1626,6 +1626,36 @@ export function saveSelectedPage(showIndicator = false) {
 
 export function openDataDir() {
     api.ipcSend("openDataDir", prefs.dataDir);
+}
+
+/* Website functions */
+
+export function openFeedbackForm(): void {
+	api.ipcSend("openFeedbackForm");
+}
+
+export function openDownloadPage(): void {
+	api.ipcSend("openDownloadPage");
+}
+
+export function openWebsite(): void {
+	api.ipcSend("openWebsite");
+}
+
+export function openUpdatesPage(): void {
+	api.ipcSend("openUpdatesPage");
+}
+
+export function openGithub(): void {
+	api.ipcSend("openGithub");
+}
+
+export function openGithubIssues(): void {
+	api.ipcSend("openGithubIssues");
+}
+
+export function openFeatherWebsite(): void {
+	api.ipcSend("openFeatherWebsite");
 }
 
 /* IPC Handlers */
