@@ -10,7 +10,18 @@ import { tableNodes } from "prosemirror-tables";
 import { addListNodes } from "prosemirror-schema-list";
 
 const mySchema = new Schema({
-    nodes: addListNodes(schema.spec.nodes, "paragraph block*", "block"),
+	// @ts-ignore
+    nodes: addListNodes(schema.spec.nodes, "paragraph block*", "block").append(tableNodes({
+        tableGroup: "block",
+        cellContent: "paragraph+",
+        cellAttributes: {
+            background: {
+                default: null,
+                getFromDOM(dom: HTMLElement) { return dom.style.backgroundColor || null; },
+                setDOMAttr(value, attrs) { if (value) attrs.style = (attrs.style || "") + `background-color: ${value};`; }
+            }
+        }
+    })),
     marks: schema.spec.marks
 });
 
