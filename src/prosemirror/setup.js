@@ -1252,6 +1252,8 @@ let codeCollapsePlugin = new prosemirrorState.Plugin({
 
 function exampleSetup(options) {
 
+	console.log(options);
+
     let myMenu = buildMenuItems(options.schema).fullMenu;
     myMenu.splice(2, 0, [new prosemirrorMenu.Dropdown(tableMenu, { label: "Table" })]);
 

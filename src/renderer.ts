@@ -3,27 +3,7 @@ import * as feather from "feather-icons";
 import validatorEscape from "validator/es/lib/escape";
 import { EditorState } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
-import { exampleSetup } from "./prosemirror/setup";
-import { Schema } from "prosemirror-model";
-import { schema } from "./prosemirror/schema";
-import { tableNodes } from "prosemirror-tables";
-import { addListNodes } from "prosemirror-schema-list";
-
-const mySchema = new Schema({
-	// @ts-ignore
-    nodes: addListNodes(schema.spec.nodes, "paragraph block*", "block").append(tableNodes({
-        tableGroup: "block",
-        cellContent: "paragraph+",
-        cellAttributes: {
-            background: {
-                default: null,
-                getFromDOM(dom: HTMLElement) { return dom.style.backgroundColor || null; },
-                setDOMAttr(value, attrs) { if (value) attrs.style = (attrs.style || "") + `background-color: ${value};`; }
-            }
-        }
-    })),
-    marks: schema.spec.marks
-});
+import { prosemirrorSetup, schema } from "./prosemirror2";
 
 /* Expose the variables/functions sent through the preload.ts */
 
@@ -1596,8 +1576,8 @@ export function loadPage(notebookIndex: number, pageIndex: number) {
     }
     editorView = new EditorView(document.getElementById("editor"), {
         state: EditorState.create({
-            doc: mySchema.nodeFromJSON(JSON.parse(selectedPageContent)),
-            plugins: exampleSetup({ schema: mySchema, tabSize: prefs.tabSize })
+            doc: schema.nodeFromJSON(JSON.parse(selectedPageContent)),
+            plugins: prosemirrorSetup(prefs.tabSize)
         })
     });
 
