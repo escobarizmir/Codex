@@ -3,7 +3,7 @@ import * as feather from "feather-icons";
 import validatorEscape from "validator/es/lib/escape";
 import { EditorState } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
-import { prosemirrorSetup, schema } from "./prosemirror2";
+import { prosemirrorSetup, schema } from "./prosemirror";
 
 /* Expose the variables/functions sent through the preload.ts */
 
