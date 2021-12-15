@@ -51,104 +51,10 @@
                             </a>
                         </li>
                         <li class="nav-item my-sidebar-item">
-                            <!--<a id="helpTab" class="nav-link unselectable" href="#help-list" data-toggle="collapse"
-                                draggable="false" onclick="">
-                                <span data-feather="help-circle"></span>Help<span
-                                    class="caret"></span>
-                            </a>-->
-                            <a id="helpTab" class="nav-link unselectable" href="#help-list" data-toggle="collapse"
-                                draggable="false" onclick="">
-                                <div class="row">
-                                    <div class="col-auto pr-0">
-                                        <span data-feather="help-circle"></span>
-                                    </div>
-                                    <div class="col pr-1"
-                                        style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
-                                        Help</div>
-                                    <div class="col-auto" style="padding-right: 20px">
-                                        <span class="caret"></span>
-                                    </div>
-                                </div>
+                            <a id="helpTab" class="nav-link" href="#" draggable="false" onclick="renderer.openHelpPage()">
+                                <span data-feather="help-circle"></span>
+                                Help
                             </a>
-                            <ul class="nav collapse" id="help-list">
-                                <li class="nav-item my-sidebar-item">
-                                    <a href="#" id="firstHelpPage" class="nav-link my-sidebar-link indent unselectable"
-                                        onclick="renderer.showUIPage('helpPage'); renderer.loadHelpPage('gettingstarted')">
-                                        <div class="row">
-                                            <div class="col-auto pr-0"><span data-feather="zap"></span></div>
-                                            <div class="col pr-4" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
-                                                Getting Started
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="nav-item my-sidebar-item">
-                                    <a href="#" class="nav-link my-sidebar-link indent unselectable"
-                                        onclick="renderer.showUIPage('helpPage'); renderer.loadHelpPage('basicediting')">
-                                        <div class="row">
-                                            <div class="col-auto pr-0"><span data-feather="edit"></span></div>
-                                            <div class="col pr-4" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
-                                                Basic Editing
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="nav-item my-sidebar-item">
-                                    <a href="#" class="nav-link my-sidebar-link indent unselectable"
-                                        onclick="renderer.showUIPage('helpPage'); renderer.loadHelpPage('equations')">
-                                        <div class="row">
-                                            <div class="col-auto pr-0"><span data-feather="divide"></span></div>
-                                            <div class="col pr-4" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
-                                                Math and Equations
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="nav-item my-sidebar-item">
-                                    <a href="#" class="nav-link my-sidebar-link indent unselectable"
-                                        onclick="renderer.showUIPage('helpPage'); renderer.loadHelpPage('keybinds')">
-                                        <div class="row">
-                                            <div class="col-auto pr-0"><span data-feather="command"></span></div>
-                                            <div class="col pr-4" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
-                                                Keybinds and Macros
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="nav-item my-sidebar-item">
-                                    <a href="#" id="cloudSyncPage" class="nav-link my-sidebar-link indent unselectable"
-                                        onclick="renderer.showUIPage('helpPage'); renderer.loadHelpPage('exporting')">
-                                        <div class="row">
-                                            <div class="col-auto pr-0"><span data-feather="external-link"></span></div>
-                                            <div class="col pr-4" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
-                                                Exporting Help
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="nav-item my-sidebar-item">
-                                    <a href="#" id="cloudSyncPage" class="nav-link my-sidebar-link indent unselectable"
-                                        onclick="renderer.showUIPage('helpPage'); renderer.loadHelpPage('cloudsyncing')">
-                                        <div class="row">
-                                            <div class="col-auto pr-0"><span data-feather="upload-cloud"></span></div>
-                                            <div class="col pr-4" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
-                                                Cloud Syncing
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="nav-item my-sidebar-item">
-                                    <a href="#" class="nav-link indent unselectable"
-                                        onclick="renderer.openFeedbackForm()">
-                                        <div class="row">
-                                            <div class="col-auto pr-0"><span data-feather="inbox"></span></div>
-                                            <div class="col pr-4" style="padding-left: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
-                                                Give Feedback (Google Forms)
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
 
                         <li id="updateBlockLI" class="nav-item my-sidebar-item" style="display: none;" title="www.codexnotes.com/download">
@@ -287,17 +193,18 @@
                 </span>
 
                 <!-- HELP PAGE -->
-                <span id="helpPage" style="display:none">
-                    <div class="content shadow-sm" id="helpContent">
-
-                    </div>
+                <span id="helpPage" style="display:none; height: 100%">
+                    <!--<div class="content shadow-sm" id="helpContent">
+                        <iframe src="https://www.codexnotes.com/docs/inedtior/" sandbox style="width: 100%; height: 100%;"></iframe>
+                    </div>-->
+                    <iframe id="helpIframe" sandbox class="py-5" style="width: 100%; height: 100%; border: none;"></iframe>
                 </span>
 
                 <!-- SETTINGS PAGE -->
                 <span id="settingsPage" class="unselectable" style="display: none;">
                     <div class="content shadow-sm">
                         <center>
-                            <h2>Appearance</h1>
+                            <h2>Appearance</h2>
                         </center>
                         <hr>
 
@@ -318,7 +225,7 @@
                         </div>
 
                         <center>
-                            <h2 class="mt-5">Code Blocks</h1>
+                            <h2 class="mt-5">Code Blocks</h2>
                         </center>
                         <hr>
 
@@ -469,7 +376,7 @@
                         </div>
 
                         <center>
-                            <h2 class="mt-5">Exporting</h1>
+                            <h2 class="mt-5">Exporting</h2>
                         </center>
                         <hr>
 
@@ -512,7 +419,7 @@
                         </div>
 
                         <center>
-                            <h2 class="mt-5">Other</h1>
+                            <h2 class="mt-5">Other</h2>
                         </center>
                         <hr>
 
@@ -679,7 +586,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="mybtn" data-dismiss="modal">Cancel</button>
-                        <input type="submit" class="mybtn-primary" id="editNotebookButton" value="Save">
+                        <input type="submit" class="mybtn-primary" value="Save">
                     </div>
                 </form>
             </div>
@@ -723,7 +630,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="mybtn" data-dismiss="modal">Cancel</button>
-                        <input type="submit" class="mybtn-primary" id="editNotebookButton" value="Create">
+                        <input type="submit" class="mybtn-primary" value="Create">
                     </div>
                 </form>
             </div>

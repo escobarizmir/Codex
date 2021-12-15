@@ -690,8 +690,8 @@ export function errorPopup(message: string, detail: string) {
     api.ipcSend("errorPopup", message, detail);
 }
 
-export function showUIPage(id: "homePage" | "settingsPage" | "helpPage" | "editorPage"): void {
-    const ids = ["homePage", "settingsPage", "helpPage", "editorPage"];
+export function showUIPage(id: "homePage" | "settingsPage" | "editorPage"): void {
+    const ids = ["homePage", "settingsPage", "editorPage"];
 
     if (ids.indexOf(id) != -1) {
         ids.splice(ids.indexOf(id), 1);
@@ -736,6 +736,10 @@ export function defaultZoom(): void {
         zoomLevel = 1.000;
         updateZoom();
     }
+}
+
+export function openHelpPage(): void {
+    api.ipcSend("openHelpPage");
 }
 
 export function updateZoom(): void {
@@ -1489,23 +1493,6 @@ export function applyModalEventHandlers(): void {
     $("#editPageModal").on("hidden.bs.modal", (e) => {
         document.getElementById("editPageNameInput").classList.remove("is-invalid");
     });
-}
-
-export function autoOpenHelpTab(): void {
-    const tab = document.getElementById("helpTab");
-    if (tab.getAttribute("aria-expanded") != "true") {
-        $("#helpTab").click();
-    }
-
-    document.querySelectorAll(".my-sidebar-link").forEach(function (item) {
-        item.classList.toggle("active", false);
-    });
-    const page = document.getElementById("firstHelpPage");
-    page.classList.toggle("active", true);
-
-    showUIPage("helpPage");
-    //TODO
-    //loadHelpPage("gettingstarted");
 }
 
 export function revertAccentColor(): void {

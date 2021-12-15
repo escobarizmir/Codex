@@ -247,7 +247,7 @@ normalMenu.append(new MenuItem({
         {
             label: "Help",
             accelerator: "F1",
-            click: () => executeJavascriptInRenderer("renderer.autoOpenHelpTab()")
+            click: () => shell.openExternal("https://www.codexnotes.com/docs/")
         },
         {
             label: "Website",
@@ -381,7 +381,7 @@ editingMenu.append(new MenuItem({
         {
             label: "Help",
             accelerator: "F1",
-            click: () => executeJavascriptInRenderer("renderer.autoOpenHelpTab()")
+            click: () => shell.openExternal("https://www.codexnotes.com/docs/")
         },
         {
             label: "Website",
@@ -496,6 +496,10 @@ ipcMain.on("openWebsite", (event) => {
 
 ipcMain.on("openDownloadPage", (event) => {
     shell.openExternal("https://www.codexnotes.com/download/");
+});
+
+ipcMain.on("openHelpPage", (event) => {
+    shell.openExternal("https://www.codexnotes.com/docs/");
 });
 
 ipcMain.on("openUpdatesPage", (event) => {
