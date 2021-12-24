@@ -3,6 +3,8 @@ import {
 	smartQuotes, emDash, ellipsis
 } from "prosemirror-inputrules";
 
+import { LANGUAGES } from "./languages";
+
 // : (NodeType) → InputRule
 // Given a blockquote node type, returns an input rule that turns `"> "`
 // at the start of a textblock into a blockquote.
@@ -54,5 +56,11 @@ export function buildInputRules(schema) {
 	if (type = schema.nodes.bullet_list) rules.push(bulletListRule(type));
 	if (type = schema.nodes.code_block) rules.push(codeBlockRule(type));
 	if (type = schema.nodes.heading) rules.push(headingRule(type, 6));
+
+	// CODE LANGUAGE MACROS
+	for (const lang in LANGUAGES) {
+		rules.push(textblockTypeInputRule(new RegExp("^\\[" + lang + "\\]$"), schema.nodes.code_block, function (match) { return ({ params: lang }); }));
+	}
+
 	return inputRules({ rules });
 }
