@@ -1376,7 +1376,7 @@ export function applyModalEventHandlers(): void {
             displayNotebooks();
             document.getElementById("newNotebookNameInput").classList.remove("is-invalid");
             (document.getElementById("newNotebookNameInput") as HTMLInputElement).value = "";
-            (document.getElementById("newNotebookColorPicker") as HTMLInputElement).value = "000000";
+            (document.getElementById("newNotebookColorPicker") as HTMLInputElement).value = "#000000";
             (document.getElementById("newNotebookIconSelect") as HTMLSelectElement).value = "book";
             document.getElementById("newNotebookIconPreview").setAttribute("data-feather", "book");
             feather.replace();
